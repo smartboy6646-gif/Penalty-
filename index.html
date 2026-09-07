@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FIFA WORLD CUP SHOOTOUT</title>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Roboto+Condensed:wght@400;700&display=swap');
+
+    :root {
+        --pitch-dark: #197a30;
+        --pitch-light: #1f8e38;
+        --gold: #f8ca25;
+        --ui-bg: #111111;
+        --text: #ffffff;
+        --red: #ff3b30;
+        --scoreboard-bg: #0d120f;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        user-select: none;
+        -webkit-touch-callout: none;
+    }
+
+    body {
+        background-color: #000;
+        color: var(--text);
+        font-family: 'Roboto Condensed', Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    #game-container {
+        position: relative;
+        width: 100%;
+        max-width: 450px;
+        height: 100%;
+        background-color: var(--ui-bg);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        overflow: hidden;
+    }
+
+    /* TOP HEADER */
+    #header {
+        background-color: #000;
+        padding: 8px 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+        border-bottom: 1px solid #222;
+    }
+
+    .header-col { display: flex; flex-direction: column; justify-content: center; }
+    .header-col-left { align-items: flex-start; }
+    .header-title { font-family: 'Oswald', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; }
+    .header-subtitle { font-size: 0.6rem; color: #aaa; text-transform: uppercase; }
+    .header-col-center { align-items: center; }
+    
+    .tourney-pill {
+        background-color: #1a1a1a;
+        padding: 4px 15px;
+        border-radius: 12px;
+        text-align: center;
+        line-height: 1.1;
+    }
+    .tourney-name { font-size: 0.6rem; color: #fff; font-weight: bold; }
+    .tourney-type { font-size: 0.55rem; color: #4ade80; font-weight: bold; }
+    .header-col-right { align-items: flex-end; }
+    .teams-left { font-size: 0.6rem; color: #aaa; text-transform: uppercase; text-align: right;}
+
+    /* SCOREBOARD */
+    #scoreboard {
+        background-color: var(--scoreboard-bg);
+        padding: 12px 10px 8px 10px;
+        display: flex;
+        flex-direction: column;
+        border-bottom: 1px solid #1a2a20;
+        z-index: 10;
+    }
+
+    .score-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+    .team-info { display: flex; align-items: flex-start; width: 38%; gap: 8px; }
+    .team-info.right { flex-direction: row-reverse; text-align: right; }
+    
+    .flag-box {
+        width: 28px; height: 20px; background: #fff; border-radius: 2px;
+        display: flex; justify-content: center; align-items: center; font-size: 18px; overflow: hidden; margin-top: 2px;
+    }
+
+    .team-details { display: flex; flex-direction: column; width: 100%; }
+    .team-name { font-family: 'Oswald', sans-serif; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+    .team-stats { font-size: 0.55rem; color: #888; display: flex; align-items: center; gap: 3px; }
+    .team-info.right .team-stats { justify-content: flex-end; }
+    .team-stats span { color: #5bc0de; font-size: 0.6rem; }
+
+    /* KICK HISTORY DOTS */
+    .history-dots { display: flex; gap: 3px; margin-top: 5px; height: 14px; }
+    .team-info.right .history-dots { justify-content: flex-end; }
+    .dot {
+        width: 14px; height: 14px; border-radius: 50%; background: #333;
+        display: flex; justify-content: center; align-items: center; font-size: 10px; font-weight: bold; color: white;
+    }
+    .dot.goal { background: #28a745; }
+    .dot.miss { background: #dc3545; }
+
+    .score-center { display: flex; flex-direction: column; align-items: center; width: 24%; }
+    .score-numbers { font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); line-height: 1; letter-spacing: 1px; }
+    .next-shooter-text { font-size: 0.55rem; color: #888; margin-top: 6px; text-transform: uppercase; text-align: center; white-space: nowrap; }
+
+    /* PITCH AREA */
+    #pitch {
+        flex: 1; position: relative;
+        background: repeating-linear-gradient(90deg, var(--pitch-dark), var(--pitch-dark) 12.5%, var(--pitch-light) 12.5%, var(--pitch-light) 25%);
+        perspective: 1000px; overflow: hidden;
+    }
+
+    /* REALISTIC PITCH MARKINGS */
+    .pitch-line { position: absolute; }
+    .pitch-bounds { top: 5%; bottom: 0; left: 5%; right: 5%; border: 2px solid rgba(255,255,255,0.4); border-bottom: none; }
+    .penalty-box { top: 5%; left: 19%; width: 62%; height: 22%; border: 2px solid rgba(255,255,255,0.4); border-top: none; }
+    .goal-area { top: 5%; left: 36%; width: 28%; height: 7%; border: 2px solid rgba(255,255,255,0.4); border-top: none; }
+    .penalty-spot { top: 20%; left: 50%; width: 5px; height: 5px; background: rgba(255,255,255,0.8); border-radius: 50%; transform: translate(-50%, -50%); }
+    
+    /* REALISTIC D-BOX */
+    .penalty-arc { 
+        position: absolute; top: 27%; left: 38%; width: 24%; height: 6%; 
+        border: 2px solid rgba(255,255,255,0.4); border-top: none; 
+        border-radius: 0 0 100px 100px; 
+    }
+    
+    .center-line { bottom: 20%; left: 5%; width: 90%; height: 0; border-top: 2px solid rgba(255,255,255,0.4); }
+    .center-circle-arc { bottom: 20%; left: 35%; width: 30%; height: 13%; border: 2px solid rgba(255,255,255,0.4); border-radius: 200px 200px 0 0; border-bottom: none; }
+
+    /* =========================================
+       3D GOAL POST (With Shake Animation)
+       ========================================= */
+    #goal {
+        position: absolute; top: 0%; left: 32%; width: 36%; height: 5%;
+        perspective: 250px; z-index: 1;
+    }
+    .goal-net {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(255,255,255,0.6);
+        background-image: 
+            linear-gradient(45deg, #888 25%, transparent 25%, transparent 75%, #888 75%, #888), 
+            linear-gradient(-45deg, #888 25%, transparent 25%, transparent 75%, #888 75%, #888);
+        background-size: 8px 8px;
+        transform-origin: top;
+        transform: rotateX(-40deg); 
+        box-shadow: inset 0 20px 30px rgba(0,0,0,0.8); 
+        border-bottom: 2px solid rgba(255,255,255,0.5);
+    }
+    .goal-crossbar {
+        position: absolute; top: 0; left: -2%; width: 104%; height: 6px;
+        background: linear-gradient(to bottom, #ffffff, #bbbbbb);
+        border-radius: 3px;
+        box-shadow: 0 5px 8px rgba(0,0,0,0.6);
+        z-index: 3;
+    }
+    .goal-post {
+        position: absolute; top: 0; width: 6px; height: 180%;
+        background: linear-gradient(to right, #ffffff, #999999);
+        border-radius: 3px;
+        box-shadow: 3px 0 6px rgba(0,0,0,0.6);
+        z-index: 3;
+    }
+    .goal-post.left { left: -2%; }
+    .goal-post.right { right: -2%; box-shadow: -3px 0 6px rgba(0,0,0,0.6); }
+
+    @keyframes shakeGoal {
+        0% { transform: translateX(0); }
+        20% { transform: translateX(-3px) translateY(1px); }
+        40% { transform: translateX(3px) translateY(-1px); }
+        60% { transform: translateX(-2px); }
+        80% { transform: translateX(2px); }
+        100% { transform: translateX(0); }
+    }
+    .shake { animation: shakeGoal 0.4s ease-in-out; }
+
+    /* QUEUE */
+    #queue-wrapper { position: absolute; top: 38%; left: 0; width: 100%; display: flex; justify-content: center; gap: 30px; z-index: 3; }
+    .queue-team { display: flex; gap: 4px; }
+    #teamA-queue { justify-content: flex-end; }
+    #teamB-queue { justify-content: flex-start; }
+    
+    .marble-flag {
+        width: 20px; height: 20px; border-radius: 50%; background: #fff; display: flex;
+        justify-content: center; align-items: center; font-size: 12px; border: 1.5px solid #fff;
+        box-shadow: 0 3px 5px rgba(0,0,0,0.5), inset -2px -2px 3px rgba(0,0,0,0.3);
+        overflow: hidden; line-height: 1; will-change: transform;
+    }
+
+    /* =========================================
+       FAKE 3D STICKMAN & ANIMATIONS
+       ========================================= */
+    .player-model {
+        position: relative; display: flex; flex-direction: column; align-items: center;
+        filter: drop-shadow(0px 5px 4px rgba(0,0,0,0.5)); 
+    }
+    .player-model .marble-flag { 
+        position: relative; width: 22px; height: 22px; font-size: 14px; z-index: 3; 
+    }
+    
+    /* FACE STYLES (Thick White Borders to stand out on ANY flag) */
+    .face {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        z-index: 10;
+    }
+    .eyes { display: flex; gap: 4px; margin-top: -2px; }
+    .eye { 
+        width: 5px; height: 5px; background: #000; border-radius: 50%; 
+        border: 1.5px solid #fff; /* HIGH VISIBILITY */
+        box-sizing: border-box;
+    }
+    .mouth { 
+        width: 7px; height: 2.5px; background: #000; border-radius: 2px; margin-top: 2px; 
+        border: 1.5px solid #fff; /* HIGH VISIBILITY */
+        box-sizing: content-box;
+    }
+    
+    /* Happy Mood */
+    .face.happy .mouth { width: 8px; height: 4px; border-radius: 0 0 8px 8px; margin-top: 1px; }
+    /* Sad Mood */
+    .face.sad .mouth { width: 8px; height: 2.5px; border-radius: 8px 8px 0 0; margin-top: 3px; }
+    .face.sad .eye { height: 2px; margin-top: 2px; border-radius: 2px; }
+
+    .player-body {
+        width: 10px; height: 14px;
+        background: linear-gradient(135deg, #ffffff, #aaaaaa);
+        border: 1px solid #555; border-radius: 4px; margin-top: -3px; z-index: 2;
+    }
+    .player-arms { position: absolute; top: 19px; width: 20px; display: flex; justify-content: space-between; z-index: 1; }
+    .player-arm {
+        width: 4px; height: 11px; background: linear-gradient(135deg, #ffffff, #aaaaaa);
+        border: 1px solid #555; border-radius: 2px; transition: transform 0.2s ease, top 0.2s;
+    }
+    .player-arm.left { transform: rotate(20deg); }
+    .player-arm.right { transform: rotate(-20deg); }
+    
+    .player-legs { display: flex; gap: 3px; margin-top: -2px; z-index: 1; transition: gap 0.2s; }
+    .player-leg {
+        width: 4px; height: 12px; background: linear-gradient(135deg, #333, #111);
+        border-radius: 2px; transition: transform 0.15s ease;
+    }
+
+    /* Idle Animations */
+    @keyframes breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } }
+    .idle-breathe { animation: breathe 1.2s ease-in-out infinite; }
+
+    @keyframes keeperReady {
+        0%, 100% { transform: translateX(0) scaleY(1); }
+        25% { transform: translateX(-3px) scaleY(0.95); }
+        75% { transform: translateX(3px) scaleY(0.95); }
+    }
+    .keeper-ready { animation: keeperReady 1s ease-in-out infinite; }
+
+    /* Walk Animation */
+    @keyframes walkLeft { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-3px) rotate(15deg); } }
+    @keyframes walkRight { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-3px) rotate(-15deg); } }
+    .walking .player-leg.left { animation: walkLeft 0.35s infinite; }
+    .walking .player-leg.right { animation: walkRight 0.35s infinite 0.175s; }
+
+    /* Kick Animation */
+    @keyframes kickLeg {
+        0% { transform: rotate(0); }
+        35% { transform: rotate(50deg) translateY(-3px); } 
+        100% { transform: rotate(-50deg) translateY(-5px); } 
+    }
+    .kicking .player-leg.right { animation: kickLeg 0.25s forwards; }
+    .kicking .player-arm.left { transform: rotate(50deg) translateY(-2px); } 
+    .kicking .player-arm.right { transform: rotate(-30deg); }
+
+    /* Dive Animation */
+    .diving .player-arm.left { transform: rotate(110deg) translateY(-5px) translateX(-4px); }
+    .diving .player-arm.right { transform: rotate(-110deg) translateY(-5px) translateX(4px); }
+    .diving .player-legs { gap: 10px; } 
+    .diving .player-leg.left { transform: rotate(35deg); }
+    .diving .player-leg.right { transform: rotate(-35deg); }
+
+    /* Celebrate / Happy Animation */
+    @keyframes jumpCelebrate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .celebrating { animation: jumpCelebrate 0.4s ease-in-out infinite; }
+    .celebrating .player-arm.left { transform: rotate(150deg) translateY(-2px); }
+    .celebrating .player-arm.right { transform: rotate(-150deg) translateY(-2px); }
+
+    /* Sad Animation */
+    .sad-anim .player-arm.left { transform: rotate(10deg); }
+    .sad-anim .player-arm.right { transform: rotate(-10deg); }
+    .sad-anim .marble-flag { transform: rotate(15deg); } 
+
+    /* ========================================= */
+
+    #goalkeeper {
+        position: absolute; top: 5%; left: 50%; transform: translate3d(-50%, -50%, 0); z-index: 3;
+        will-change: transform, left;
+    }
+
+    #shooter { position: absolute; z-index: 4; will-change: transform, left, top; opacity: 0; }
+
+    /* REAL FOOTBALL SVG */
+    #ball {
+        position: absolute; top: 20%; left: 50%; width: 14px; height: 14px;
+        background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="11.5" fill="white"/><path d="M12 6L17 10L15 16H9L7 10Z" fill="black"/><path d="M12 6V0M17 10L23 8M15 16L18 22M9 16L6 22M7 10L1 8" stroke="black" stroke-width="1.5"/></svg>') center/cover;
+        border-radius: 50%;
+        transform: translate3d(-50%, -50%, 0); z-index: 2; 
+        will-change: transform, left, top; box-shadow: 2px 4px 6px rgba(0,0,0,0.6);
+    }
+
+    /* FLOATY TEXT ALERT BOX */
+    #alert-box {
+        position: absolute; top: 15%; left: 50%; transform: translate(-50%, -50%) scale(0);
+        background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center;
+        z-index: 20; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none;
+    }
+    .alert-show { transform: translate(-50%, -50%) scale(1) !important; }
+    
+    #alert-text { 
+        font-family: 'Oswald', sans-serif; font-size: 3.5rem; font-weight: 700; color: #fff; line-height: 1; 
+        text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 10px 15px rgba(0,0,0,0.8);
+        letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; text-align: center;
+    }
+
+    /* BOTTOM OVERLAYS */
+    #bottom-overlays {
+        position: absolute; bottom: 0; left: 0; width: 100%; display: flex;
+        flex-direction: column; z-index: 10; pointer-events: none; 
+    }
+
+    .coming-up-bar {
+        background: rgba(0, 0, 0, 0.7); text-align: center; padding: 6px; font-family: 'Oswald', sans-serif;
+        font-size: 0.75rem; color: var(--gold); letter-spacing: 0.5px; margin: 0 5% 10px 5%; pointer-events: auto;
+    }
+    
+    .comment-prompt-container { padding: 0 5% 15px 5%; pointer-events: auto; }
+    .comment-prompt {
+        background: #000; border: 1px solid var(--gold); border-radius: 12px; padding: 8px; text-align: center;
+        font-size: 0.75rem; color: #fff; display: flex; justify-content: center; align-items: center; gap: 5px;
+    }
+
+    .scrolling-flags {
+        overflow: hidden; white-space: nowrap; padding: 4px 0; background: #000;
+        border-top: 1px solid #222; border-bottom: 1px solid #222; pointer-events: auto;
+    }
+
+    .marquee {
+        display: inline-block; animation: scroll 40s linear infinite; font-size: 0.55rem;
+        color: #aaa; font-weight: bold; letter-spacing: 1px; will-change: transform;
+    }
+
+    @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+    #upcoming-marbles { height: 70px; display: flex; justify-content: center; align-items: center; gap: 6px; background: transparent; }
+    #upcoming-marbles .marble-flag { width: 22px; height: 22px; font-size: 14px; border-width: 1px; opacity: 0.9; }
+
+    /* MENUS & CONTROLS */
+    #controls-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; display: flex; flex-direction: column;
+        justify-content: center; align-items: center; padding: 20px; text-align: center;
+    }
+    .menu-title { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 20px; line-height: 1.1; text-shadow: 2px 2px 5px #000; }
+    
+    button {
+        background: linear-gradient(to bottom, #28a745, #1e7e34); color: white; border: 2px solid var(--gold); padding: 12px 25px; font-size: 1.2rem; font-family: 'Oswald', sans-serif; border-radius: 5px;
+        cursor: pointer; margin: 10px 0; width: 80%; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    }
+    button:active { transform: scale(0.95); }
+    .btn-secondary { background: linear-gradient(to bottom, #444, #222); border-color: #666; }
+    .settings-row { display: flex; justify-content: space-between; width: 80%; margin-top: 15px; gap: 10px; }
+    .settings-row button { width: 50%; font-size: 0.9rem; padding: 10px 5px; margin: 0; }
+    .hidden { display: none !important; }
+
+    /* HUD BUTTONS */
+    #hud-controls { position: absolute; top: 80px; right: 5px; z-index: 20; display: flex; flex-direction: column; gap: 5px; }
+    .hud-btn {
+        background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px;
+        font-size: 0.8rem; border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; cursor: pointer;
+    }
+</style>
+</head>
+<body>
+
+<div id="game-container">
+    
+    <div id="controls-overlay">
+        <h1 class="menu-title">FIFA WORLD CUP<br>SHOOTOUT</h1>
+        <p style="margin-bottom: 20px; color: #ccc;">48-TEAM KNOCKOUT SIMULATION</p>
+        <button id="btn-start" onclick="startGame()">▶ START TOURNAMENT</button>
+        
+        <div class="settings-row">
+            <button id="btn-sound" class="btn-secondary" onclick="toggleSound()">🔊 Sound: ON</button>
+            <button id="btn-tts" class="btn-secondary" onclick="toggleTTS()">🗣️ TTS: ON</button>
+        </div>
+        <div class="settings-row">
+            <button id="btn-speed" class="btn-secondary" style="width: 100%" onclick="cycleSpeed()">⚙️ Speed: NORMAL</button>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <div id="header">
+        <div class="header-col header-col-left">
+            <div class="header-title">FIFA WORLD CUP SHOOTOUT</div>
+            <div class="header-subtitle" id="round-text">ROUND OF 48</div>
+        </div>
+        <div class="header-col header-col-center">
+            <div class="tourney-pill">
+                <span class="tourney-name">FIFA World Cup</span><br>
+                <span class="tourney-type">48-TEAM KNOCKOUT</span>
+            </div>
+        </div>
+        <div class="header-col header-col-right">
+            <div class="teams-left">TEAMS LEFT: <span id="teams-left" style="color:#fff;">48</span></div>
+            <div class="header-subtitle">MATCH <span id="match-number" style="color:#fff;">1</span></div>
+        </div>
+    </div>
+
+    <!-- SCOREBOARD -->
+    <div id="scoreboard">
+        <div class="score-row">
+            <div class="team-info" id="teamA-info">
+                <div class="flag-box" id="flagA">⚽</div>
+                <div class="team-details">
+                    <div class="team-name" id="nameA">TEAM A</div>
+                    <div class="team-stats"><span>🛡️</span> <span id="kicksA-txt">0</span> kicks taken</div>
+                    <div class="history-dots" id="dotsA"></div>
+                </div>
+            </div>
+            
+            <div class="score-center">
+                <div class="score-numbers"><span id="scoreA">0</span> - <span id="scoreB">0</span></div>
+            </div>
+            
+            <div class="team-info right" id="teamB-info">
+                <div class="flag-box" id="flagB">⚽</div>
+                <div class="team-details">
+                    <div class="team-name" id="nameB">TEAM B</div>
+                    <div class="team-stats"><span>🛡️</span> <span id="kicksB-txt">0</span> kicks taken</div>
+                    <div class="history-dots" id="dotsB"></div>
+                </div>
+            </div>
+        </div>
+        <div class="next-shooter-text">NEXT: <span id="next-name">...</span> TO SHOOT</div>
+    </div>
+
+    <!-- PITCH & GAMEPLAY LAYER -->
+    <div id="pitch">
+        <div class="pitch-line pitch-bounds"></div>
+        <div class="pitch-line penalty-box"></div>
+        <div class="pitch-line goal-area"></div>
+        <div class="pitch-line center-line"></div>
+        <div class="pitch-line center-circle-arc"></div>
+        <div class="pitch-line penalty-spot"></div>
+        <div class="pitch-line penalty-arc"></div>
+
+        <!-- 3D GOAL POST -->
+        <div id="goal">
+            <div class="goal-net"></div>
+            <div class="goal-crossbar"></div>
+            <div class="goal-post left"></div>
+            <div class="goal-post right"></div>
+        </div>
+        
+        <div id="queue-wrapper">
+            <div id="teamA-queue" class="queue-team"></div>
+            <div id="teamB-queue" class="queue-team"></div>
+        </div>
+        
+        <div id="goalkeeper"></div> 
+        <div id="ball"></div>
+        <div id="shooter"></div>
+
+        <div id="alert-box">
+            <div id="alert-text">GOAL!</div>
+        </div>
+
+        <div id="hud-controls">
+            <div class="hud-btn" onclick="togglePause()" id="btn-hud-pause">⏸</div>
+            <div class="hud-btn" onclick="skipMatch()">⏭</div>
+        </div>
+    </div>
+
+    <!-- BOTTOM UI LAYERED OVER PITCH -->
+    <div id="bottom-overlays">
+        <div class="coming-up-bar">
+            COMING UP: <span id="coming-up-text">TBD vs TBD</span>
+        </div>
+        
+        <div class="comment-prompt-container">
+            <div class="comment-prompt">
+                💬 Comment your favourite team to win! 🏆
+            </div>
+        </div>
+        
+        <div class="scrolling-flags">
+            <div class="marquee" id="marquee-content">
+                <!-- Populated via JS -->
+            </div>
+        </div>
+        
+        <div id="upcoming-marbles">
+            <!-- Populated via JS -->
+        </div>
+    </div>
+
+</div>
+
+<script>
+    /*===================================================================
+      1. GAME DATA - Top 48 FIFA Ranking Teams 
+    ===================================================================*/
+    const ALL_TEAMS = [
+        { name: "ARGENTINA", flag: "🇦🇷" }, { name: "FRANCE", flag: "🇫🇷" },
+        { name: "BRAZIL", flag: "🇧🇷" }, { name: "ENGLAND", flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿" },
+        { name: "BELGIUM", flag: "🇧🇪" }, { name: "PORTUGAL", flag: "🇵🇹" },
+        { name: "NETHERLANDS", flag: "🇳🇱" }, { name: "SPAIN", flag: "🇪🇸" },
+        { name: "ITALY", flag: "🇮🇹" }, { name: "CROATIA", flag: "🇭🇷" },
+        { name: "URUGUAY", flag: "🇺🇾" }, { name: "USA", flag: "🇺🇸" },
+        { name: "MOROCCO", flag: "🇲🇦" }, { name: "COLOMBIA", flag: "🇨🇴" },
+        { name: "MEXICO", flag: "🇲🇽" }, { name: "GERMANY", flag: "🇩🇪" },
+        { name: "SENEGAL", flag: "🇸🇳" }, { name: "JAPAN", flag: "🇯🇵" },
+        { name: "SWITZERLAND", flag: "🇨🇭" }, { name: "IRAN", flag: "🇮🇷" },
+        { name: "DENMARK", flag: "🇩🇰" }, { name: "SOUTH KOREA", flag: "🇰🇷" },
+        { name: "AUSTRALIA", flag: "🇦🇺" }, { name: "UKRAINE", flag: "🇺🇦" },
+        { name: "AUSTRIA", flag: "🇦🇹" }, { name: "SWEDEN", flag: "🇸🇪" },
+        { name: "POLAND", flag: "🇵🇱" }, { name: "HUNGARY", flag: "🇭🇺" },
+        { name: "SERBIA", flag: "🇷🇸" }, { name: "WALES", flag: "🏴󠁧󠁢󠁷󠁬󠁳󠁿" },
+        { name: "PERU", flag: "🇵🇪" }, { name: "SCOTLAND", flag: "🏴󠁧󠁢󠁳󠁣󠁴󠁿" },
+        { name: "TURKEY", flag: "🇹🇷" }, { name: "ECUADOR", flag: "🇪🇨" },
+        { name: "CHILE", flag: "🇨🇱" }, { name: "TUNISIA", flag: "🇹🇳" },
+        { name: "ALGERIA", flag: "🇩🇿" }, { name: "EGYPT", flag: "🇪🇬" },
+        { name: "NIGERIA", flag: "🇳🇬" }, { name: "CAMEROON", flag: "🇨🇲" },
+        { name: "IVORY COAST", flag: "🇨🇮" }, { name: "CANADA", flag: "🇨🇦" },
+        { name: "COSTA RICA", flag: "🇨🇷" }, { name: "PANAMA", flag: "🇵🇦" },
+        { name: "SAUDI ARABIA", flag: "🇸🇦" }, { name: "QATAR", flag: "🇶🇦" },
+        { name: "NEW ZEALAND", flag: "🇳🇿" }, { name: "NORWAY", flag: "🇳🇴" }
+    ];
+
+    /*===================================================================
+      2. STATE
+    ===================================================================*/
+    let audioCtx = null;
+    let synth = window.speechSynthesis;
+    let settings = { sound: true, tts: true, speedMode: 'NORMAL', speedMult: 1 };
+    
+    let tournament = { 
+        bracket: [], nextBracket: [], byes: [], 
+        roundName: "ROUND OF 48", matchNumber: 1, 
+        teamsRemaining: 48, paused: false, skipRequested: false 
+    };
+    let match = { teamA: null, teamB: null, scoreA: 0, scoreB: 0, kicksA: 0, kicksB: 0, turn: 'A', isSuddenDeath: false };
+    let timeouts = [];
+    let stateResolver = null;
+
+    /*===================================================================
+      3. AUDIO ENGINE
+    ===================================================================*/
+    function initAudio() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function playNoiseFilter(duration, vol=0.1, type='lowpass', freq=1000) {
+        if (!settings.sound || !audioCtx) return;
+        try {
+            let bufferSize = audioCtx.sampleRate * duration;
+            let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            let data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+            let noise = audioCtx.createBufferSource(); noise.buffer = buffer;
+            let filter = audioCtx.createBiquadFilter(); filter.type = type; filter.frequency.value = freq;
+            let gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
+            noise.start();
+        } catch(e) {}
+    }
+
+    const sfx = {
+        kick: () => {
+            if (!settings.sound || !audioCtx) return;
+            let t = audioCtx.currentTime;
+            let snap = audioCtx.createOscillator(); let snapGain = audioCtx.createGain();
+            snap.type = 'triangle';
+            snap.frequency.setValueAtTime(800, t); snap.frequency.exponentialRampToValueAtTime(100, t + 0.1);
+            snapGain.gain.setValueAtTime(0.8, t); snapGain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+            snap.connect(snapGain); snapGain.connect(audioCtx.destination);
+            snap.start(t); snap.stop(t + 0.1);
+
+            let thud = audioCtx.createOscillator(); let thudGain = audioCtx.createGain();
+            thud.type = 'sine';
+            thud.frequency.setValueAtTime(150, t); thud.frequency.exponentialRampToValueAtTime(10, t + 0.15);
+            thudGain.gain.setValueAtTime(1, t); thudGain.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
+            thud.connect(thudGain); thudGain.connect(audioCtx.destination);
+            thud.start(t); thud.stop(t + 0.15);
+            
+            playNoiseFilter(0.08, 0.5, 'highpass', 800);
+        },
+        whistle: () => {
+            if (!settings.sound || !audioCtx) return;
+            let t = audioCtx.currentTime; let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(2500, t); osc.frequency.setValueAtTime(2800, t + 0.1); osc.frequency.setValueAtTime(2500, t + 0.2);
+            gain.gain.setValueAtTime(0.2, t); gain.gain.linearRampToValueAtTime(0, t + 0.4);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(t); osc.stop(t + 0.4);
+        },
+        win: () => {
+            if (!settings.sound || !audioCtx) return;
+            let t = audioCtx.currentTime;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'square';
+            [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => { 
+                osc.frequency.setValueAtTime(freq, t + (i * 0.15));
+            });
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.15, t + 0.05);
+            gain.gain.setValueAtTime(0.15, t + 0.55);
+            gain.gain.linearRampToValueAtTime(0, t + 1.0);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(t); osc.stop(t + 1.0);
+        },
+        nextMatch: () => {
+            if (!settings.sound || !audioCtx) return;
+            let t = audioCtx.currentTime;
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, t);
+            osc.frequency.setValueAtTime(450, t + 0.15);
+            gain.gain.setValueAtTime(0, t);
+            gain.gain.linearRampToValueAtTime(0.3, t + 0.05);
+            gain.gain.linearRampToValueAtTime(0, t + 0.4);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(t); osc.stop(t + 0.4);
+        },
+        post: () => {
+            if (!settings.sound || !audioCtx) return;
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.type = 'triangle'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.5, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+        },
+        net: () => playNoiseFilter(0.3, 0.4, 'bandpass', 1500),
+        save: () => playNoiseFilter(0.2, 0.5, 'lowpass', 600),
+        cheer: () => playNoiseFilter(1.5, 0.4, 'lowpass', 800),
+        aww: () => {
+            if (!settings.sound || !audioCtx) return;
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+            osc.type = 'sine'; osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 1.0);
+            gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.0);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 1.0);
+        }
+    };
+
+    let lastSpeechTime = 0;
+    function speak(text, force=false) {
+        if (!settings.tts) return;
+        let now = Date.now();
+        if (!force && now - lastSpeechTime < 2500 * settings.speedMult) return;
+        if (synth.speaking) synth.cancel();
+        let u = new SpeechSynthesisUtterance(text);
+        u.rate = 1.3 / settings.speedMult; u.pitch = 1.0;
+        setTimeout(() => synth.speak(u), 0);
+        lastSpeechTime = now;
+    }
+
+    /*===================================================================
+      4. CORE LOGIC
+    ===================================================================*/
+    function toggleSound() { settings.sound = !settings.sound; document.getElementById('btn-sound').innerText = settings.sound ? "🔊 Sound: ON" : "🔇 Sound: OFF"; }
+    function toggleTTS() { settings.tts = !settings.tts; document.getElementById('btn-tts').innerText = settings.tts ? "🗣️ TTS: ON" : "🗣️ TTS: OFF"; }
+    function cycleSpeed() {
+        if (settings.speedMode === 'NORMAL') { settings.speedMode = 'FAST'; settings.speedMult = 0.5; }
+        else if (settings.speedMode === 'FAST') { settings.speedMode = 'SLOW'; settings.speedMult = 1.5; }
+        else { settings.speedMode = 'NORMAL'; settings.speedMult = 1.0; }
+        document.getElementById('btn-speed').innerText = `⚙️ Speed: ${settings.speedMode}`;
+    }
+    function delay(ms) { return new Promise(resolve => { timeouts.push(setTimeout(resolve, ms * settings.speedMult)); }); }
+    function togglePause() { tournament.paused = !tournament.paused; document.getElementById('btn-hud-pause').innerText = tournament.paused ? "▶" : "⏸"; if (!tournament.paused && stateResolver) { let res = stateResolver; stateResolver = null; res(); } }
+    function skipMatch() { tournament.skipRequested = true; if(tournament.paused) togglePause(); }
+    async function waitIfPaused() { if (tournament.paused) await new Promise(r => stateResolver = r); }
+
+    /*===================================================================
+      5. INITIALIZATION & TOURNAMENT
+    ===================================================================*/
+    function initMarquee() {
+        let text = ALL_TEAMS.map(t => `<span style="margin: 0 15px;">${t.flag} ${t.name}</span>`).join("");
+        document.getElementById('marquee-content').innerHTML = text + text;
+    }
+
+    function updateUpcomingMarbles() {
+        let container = document.getElementById('upcoming-marbles');
+        container.innerHTML = '';
+        let maxMatches = Math.min(4, tournament.bracket.length);
+        if (maxMatches === 0) return;
+        
+        for(let i=0; i < maxMatches; i++) {
+            let tA = tournament.bracket[i][0]; let tB = tournament.bracket[i][1];
+            container.innerHTML += `<div class="marble-flag">${tA.flag}</div><div class="marble-flag" style="margin-right: 15px;">${tB.flag}</div>`;
+        }
+    }
+
+    function populateQueues(teamA, teamB) {
+        let qa = document.getElementById('teamA-queue');
+        let qb = document.getElementById('teamB-queue');
+        qa.innerHTML = ''; qb.innerHTML = '';
+        for (let i = 0; i < 5; i++) {
+            qa.innerHTML += `<div class="marble-flag">${teamA.flag}</div>`;
+            qb.innerHTML += `<div class="marble-flag">${teamB.flag}</div>`;
+        }
+    }
+
+    async function startGame() {
+        initAudio();
+        document.getElementById('controls-overlay').classList.add('hidden');
+        initMarquee();
+        
+        let teams = [...ALL_TEAMS].sort(() => Math.random() - 0.5);
+        
+        let round1Teams = teams.slice(0, 32);
+        tournament.byes = teams.slice(32, 48);
+        
+        tournament.bracket = [];
+        for (let i = 0; i < round1Teams.length; i+=2) {
+            tournament.bracket.push([round1Teams[i], round1Teams[i+1]]);
+        }
+        
+        tournament.nextBracket = []; 
+        tournament.matchNumber = 1;
+        tournament.teamsRemaining = 48;
+        updateRoundName(48);
+        
+        speak("Welcome to the FIFA World Cup Penalty Shootout!", true);
+        await delay(2000);
+        runTournamentLoop();
+    }
+
+    async function runTournamentLoop() {
+        while (tournament.bracket.length > 0) {
+            updateTournamentUI();
+            let matchup = tournament.bracket.shift();
+            
+            if (tournament.bracket.length > 0) {
+                let next = tournament.bracket[0];
+                document.getElementById('coming-up-text').innerText = `${next[0].name} vs ${next[1].name}`;
+                sfx.nextMatch(); 
+            } else {
+                document.getElementById('coming-up-text').innerText = "ROUND COMPLETE";
+            }
+            updateUpcomingMarbles();
+
+            let winner = await runMatch(matchup[0], matchup[1]);
+            tournament.nextBracket.push(winner);
+            
+            tournament.teamsRemaining--; 
+            tournament.matchNumber++;
+            
+            if (tournament.bracket.length === 0) {
+                if (tournament.nextBracket.length === 1 && tournament.byes.length === 0) {
+                    await showChampion(tournament.nextBracket[0]);
+                    return;
+                } else {
+                    let nextRoundTeams = [...tournament.nextBracket, ...tournament.byes];
+                    tournament.byes = []; 
+                    tournament.nextBracket = [];
+                    
+                    nextRoundTeams.sort(() => Math.random() - 0.5); 
+                    
+                    for(let i=0; i<nextRoundTeams.length; i+=2) {
+                        tournament.bracket.push([nextRoundTeams[i], nextRoundTeams[i+1]]);
+                    }
+                    
+                    updateRoundName(tournament.teamsRemaining);
+                    speak(`Moving to the ${tournament.roundName}`, true);
+                    await delay(3000);
+                }
+            }
+        }
+    }
+
+    function updateRoundName(teamsCount) {
+        if (teamsCount > 32) tournament.roundName = "ROUND OF 48";
+        else if (teamsCount > 16) tournament.roundName = "ROUND OF 32";
+        else if (teamsCount > 8) tournament.roundName = "ROUND OF 16";
+        else if (teamsCount > 4) tournament.roundName = "QUARTERFINALS";
+        else if (teamsCount > 2) tournament.roundName = "SEMIFINALS";
+        else tournament.roundName = "FINAL";
+    }
+
+    function updateTournamentUI() {
+        document.getElementById('round-text').innerText = tournament.roundName;
+        document.getElementById('match-number').innerText = tournament.matchNumber;
+        document.getElementById('teams-left').innerText = tournament.teamsRemaining;
+    }
+
+    /*===================================================================
+      6. MATCH SIMULATION & LOGIC
+    ===================================================================*/
+    function getPlayerHTML(flagEmoji, isKeeper=false) {
+        let activeClass = isKeeper ? 'keeper-ready' : 'idle-breathe';
+        return `
+            <div class="player-model ${activeClass}">
+                <div class="marble-flag">
+                    ${flagEmoji}
+                    <div class="face neutral">
+                        <div class="eyes">
+                            <div class="eye"></div>
+                            <div class="eye"></div>
+                        </div>
+                        <div class="mouth"></div>
+                    </div>
+                </div>
+                <div class="player-arms">
+                    <div class="player-arm left"></div>
+                    <div class="player-arm right"></div>
+                </div>
+                <div class="player-body"></div>
+                <div class="player-legs">
+                    <div class="player-leg left"></div>
+                    <div class="player-leg right"></div>
+                </div>
+            </div>
+        `;
+    }
+
+    async function runMatch(teamA, teamB) {
+        tournament.skipRequested = false;
+        match = { teamA, teamB, scoreA: 0, scoreB: 0, kicksA: 0, kicksB: 0, turn: 'A', isSuddenDeath: false };
+
+        document.getElementById('flagA').innerText = teamA.flag;
+        document.getElementById('nameA').innerText = teamA.name;
+        document.getElementById('flagB').innerText = teamB.flag;
+        document.getElementById('nameB').innerText = teamB.name;
+        
+        document.getElementById('dotsA').innerHTML = '';
+        document.getElementById('dotsB').innerHTML = '';
+        
+        populateQueues(teamA, teamB);
+        updateScoreUI();
+        
+        document.getElementById('shooter').style.opacity = '0';
+        speak(`${teamA.name} versus ${teamB.name}.`, true);
+        await delay(2000);
+
+        while (true) {
+            await waitIfPaused();
+            
+            if (tournament.skipRequested) {
+                let res = instantSim(match);
+                match.scoreA = res.scoreA; match.scoreB = res.scoreB;
+                updateScoreUI();
+                break;
+            }
+
+            let currentTeam = match.turn === 'A' ? match.teamA : match.teamB;
+            let defendingTeam = match.turn === 'A' ? match.teamB : match.teamA;
+            
+            document.getElementById('next-name').innerText = currentTeam.name;
+
+            let startLeft = '50%'; 
+            let startTop = '38%'; 
+            let qEl = null;
+
+            if (match.turn === 'A') {
+                let q = document.getElementById('teamA-queue');
+                if (q.children.length > 0) qEl = q.lastChild;
+            } else {
+                let q = document.getElementById('teamB-queue');
+                if (q.children.length > 0) qEl = q.firstChild;
+            }
+
+            if (qEl) {
+                let rect = qEl.getBoundingClientRect();
+                let pitchRect = document.getElementById('pitch').getBoundingClientRect();
+                startLeft = ((rect.left - pitchRect.left + rect.width/2) / pitchRect.width * 100) + '%';
+                qEl.parentNode.removeChild(qEl); 
+            }
+
+            await resetPitch(startLeft, startTop, currentTeam.flag, defendingTeam.flag);
+            
+            let s = document.getElementById('shooter');
+            let sModel = s.querySelector('.player-model');
+            
+            sModel.classList.remove('idle-breathe');
+            s.classList.add('walking');
+            s.style.transition = 'top 0.8s linear, left 0.8s linear, transform 0.8s linear';
+            s.style.top = '28%'; 
+            s.style.left = '50%';
+            s.style.transform = 'translate3d(-50%, -50%, 0) scale(1)';
+            
+            await delay(900); 
+            s.classList.remove('walking');
+            sModel.classList.add('idle-breathe');
+            
+            let shotData = calcShot();
+            let phrases = [`Here comes ${currentTeam.name}.`, `${currentTeam.name} steps up.`, `The pressure is on.`];
+            speak(phrases[Math.floor(Math.random()*phrases.length)]);
+            
+            await delay(1200);
+            sfx.whistle();
+            await delay(800);
+
+            await executeKickAnimation(shotData);
+            handleResult(shotData.result);
+            
+            await delay(1500);
+            
+            s.style.transition = 'opacity 0.4s'; s.style.opacity = '0';
+            
+            await delay(1000);
+
+            let winner = checkWinCondition();
+            if (winner) break;
+
+            if (match.turn === 'A') { match.turn = 'B'; } 
+            else { match.turn = 'A'; if (match.kicksA >= 5 && match.scoreA === match.scoreB) match.isSuddenDeath = true; }
+            document.getElementById('alert-box').classList.remove('alert-show');
+        }
+
+        document.getElementById('alert-box').classList.remove('alert-show');
+        let winner = match.scoreA > match.scoreB ? match.teamA : match.teamB;
+        speak(`${winner.name} wins the shootout!`, true);
+        
+        sfx.win(); 
+        showAlert(`${winner.flag} WINS!`, '#f8ca25'); 
+        sfx.cheer();
+        await delay(4000);
+        document.getElementById('alert-box').classList.remove('alert-show');
+        return winner;
+    }
+
+    function checkWinCondition() {
+        if (!match.isSuddenDeath) {
+            let remainA = 5 - match.kicksA; let remainB = 5 - match.kicksB;
+            if (match.scoreA > match.scoreB + remainB) return match.teamA;
+            if (match.scoreB > match.scoreA + remainA) return match.teamB;
+            if (match.kicksA === 5 && match.kicksB === 5 && match.scoreA !== match.scoreB) return match.scoreA > match.scoreB ? match.teamA : match.teamB;
+        } else {
+            if (match.kicksA === match.kicksB && match.scoreA !== match.scoreB) return match.scoreA > match.scoreB ? match.teamA : match.teamB;
+        }
+        return null;
+    }
+
+    function instantSim(m) {
+        while(true) {
+            let res = calcShot().result;
+            if (m.turn === 'A') { m.kicksA++; if(res==='goal') m.scoreA++; }
+            else { m.kicksB++; if(res==='goal') m.scoreB++; }
+
+            let remainA = 5 - m.kicksA; let remainB = 5 - m.kicksB;
+            if (!m.isSuddenDeath) {
+                if (m.scoreA > m.scoreB + remainB) return m;
+                if (m.scoreB > m.scoreA + remainA) return m;
+                if (m.kicksA === 5 && m.kicksB === 5) m.isSuddenDeath = true;
+            } else {
+                if (m.kicksA === m.kicksB && m.scoreA !== m.scoreB) return m;
+            }
+            m.turn = m.turn === 'A' ? 'B' : 'A';
+        }
+    }
+
+    function calcShot() {
+        let dirs = [-1, 0, 1];
+        let shotX = dirs[Math.floor(Math.random() * dirs.length)];
+        let gkX = dirs[Math.floor(Math.random() * dirs.length)];
+        
+        let result = 'goal';
+        if (shotX === gkX) {
+            result = 'save';
+        } else {
+            let r = Math.random();
+            if (r > 0.12) result = 'goal';
+            else if (r > 0.06) result = 'miss';
+            else result = 'post';
+        }
+        return { shotX, gkX, result };
+    }
+
+    /*===================================================================
+      7. ANIMATIONS & UI UPDATES
+    ===================================================================*/
+    function resetPitch(startLeft, startTop, shooterFlag, keeperFlag) {
+        return new Promise(resolve => {
+            let b = document.getElementById('ball');
+            let g = document.getElementById('goalkeeper');
+            let s = document.getElementById('shooter');
+            
+            s.innerHTML = getPlayerHTML(shooterFlag, false);
+            g.innerHTML = getPlayerHTML(keeperFlag, true);
+            
+            b.style.transition = 'none'; g.style.transition = 'none'; s.style.transition = 'none';
+            s.style.opacity = '1';
+            
+            b.style.top = '20%'; b.style.left = '50%'; b.style.transform = 'translate3d(-50%, -50%, 0) scale(1)';
+            g.style.top = '5%'; g.style.left = '50%'; g.style.transform = 'translate3d(-50%, -50%, 0)'; 
+            
+            s.style.top = startTop; s.style.left = startLeft; s.style.transform = 'translate3d(-50%, -50%, 0) scale(1)';
+            
+            requestAnimationFrame(() => requestAnimationFrame(resolve));
+        });
+    }
+
+    async function executeKickAnimation(data) {
+        let b = document.getElementById('ball');
+        let g = document.getElementById('goalkeeper');
+        let s = document.getElementById('shooter');
+        
+        let sModel = s.querySelector('.player-model');
+        let gModel = g.querySelector('.player-model');
+        
+        sModel.classList.remove('idle-breathe');
+        
+        s.style.transition = 'top 0.2s linear, left 0.2s linear';
+        s.style.top = '25%'; 
+        s.style.left = (50 + (Math.random()*4 - 2)) + '%';
+        
+        await delay(200);
+        
+        sModel.classList.add('kicking'); 
+        sfx.kick();
+        
+        gModel.classList.remove('keeper-ready');
+        gModel.classList.add('diving'); 
+
+        b.style.transition = 'top 0.35s ease-out, left 0.35s ease-out, transform 0.35s ease-out';
+        g.style.transition = 'left 0.35s ease-out, transform 0.35s ease-out';
+
+        let randOffset = (Math.random() * 4 - 2); 
+        let targetLeft = 50 + (data.shotX * 16) + randOffset;
+        let gkLeft = 50 + (data.gkX * 14); 
+        let targetTop = 2; // Default Goal Inside Net
+
+        if (data.result === 'miss') {
+            targetTop = -5;
+            targetLeft = data.shotX === -1 ? 25 : (data.shotX === 1 ? 75 : 50 + (Math.random()*20-10));
+        } else if (data.result === 'post') {
+            targetTop = 4;
+            targetLeft = data.shotX === -1 ? 32 : (data.shotX === 1 ? 68 : 50);
+        } else if (data.result === 'save') {
+            targetTop = 7; 
+        }
+
+        b.style.top = targetTop + '%';
+        b.style.left = targetLeft + '%';
+        b.style.transform = 'translate3d(-50%, -50%, 0) scale(0.6)';
+
+        g.style.left = gkLeft + '%';
+        g.style.transform = `translate3d(-50%, -50%, 0) rotate(${data.gkX * 75}deg)`;
+
+        await delay(350); 
+    }
+
+    function handleResult(result) {
+        let dot = document.createElement('div');
+        dot.className = 'dot';
+        
+        let sModel = document.getElementById('shooter').querySelector('.player-model');
+        let gModel = document.getElementById('goalkeeper').querySelector('.player-model');
+        let sFace = sModel.querySelector('.face');
+        let gFace = gModel.querySelector('.face');
+
+        sModel.classList.remove('kicking');
+        gModel.classList.remove('diving');
+
+        if (result === 'goal') {
+            // GOAL POST SHAKE EFFECT
+            let gPost = document.getElementById('goal');
+            gPost.classList.add('shake');
+            setTimeout(() => gPost.classList.remove('shake'), 500);
+
+            if (match.turn === 'A') match.scoreA++; else match.scoreB++;
+            sfx.net(); sfx.cheer();
+            speak(Math.random()<0.5 ? "GOAL!" : "He scores!");
+            showAlert("GOAL!", "#4ade80");
+            
+            // MOODS: Player Happy, Keeper Sad
+            sFace.className = 'face happy'; sModel.classList.add('celebrating');
+            gFace.className = 'face sad'; gModel.classList.add('sad-anim');
+
+            dot.classList.add('goal'); dot.innerText = '✓';
+            
+            // Note: Ball is NOT moved back. It stays inside the net!
+        } 
+        else if (result === 'save') {
+            sfx.save();
+            speak(Math.random()<0.5 ? "What a save!" : "Denied by the keeper!");
+            showAlert("SAVE!", "#ff3b30");
+            
+            // Bounce off keeper
+            let b = document.getElementById('ball');
+            b.style.transition = 'top 0.3s, left 0.3s';
+            b.style.top = '12%'; b.style.left = (parseFloat(b.style.left) + (Math.random()*10 - 5)) + '%';
+            
+            // MOODS: Keeper Happy, Player Sad
+            gFace.className = 'face happy'; gModel.classList.add('celebrating');
+            sFace.className = 'face sad'; sModel.classList.add('sad-anim');
+
+            dot.classList.add('miss'); dot.innerText = '✗';
+        }
+        else if (result === 'post') {
+            sfx.post(); sfx.aww();
+            speak("Off the post!");
+            showAlert("POST!", "#f8ca25");
+            
+            // Bounce off post
+            let b = document.getElementById('ball');
+            b.style.transition = 'top 0.5s, left 0.5s';
+            b.style.top = '15%'; b.style.left = (parseFloat(b.style.left) > 50 ? 70 : 30) + '%';
+            
+            gFace.className = 'face happy'; gModel.classList.add('celebrating');
+            sFace.className = 'face sad'; sModel.classList.add('sad-anim');
+
+            dot.classList.add('miss'); dot.innerText = '✗';
+        }
+        else {
+            sfx.aww(); speak("He missed it wide.");
+            showAlert("MISS!", "#aaaaaa");
+            
+            gFace.className = 'face happy'; gModel.classList.add('celebrating');
+            sFace.className = 'face sad'; sModel.classList.add('sad-anim');
+
+            dot.classList.add('miss'); dot.innerText = '✗';
+        }
+
+        if (match.turn === 'A') {
+            match.kicksA++; document.getElementById('dotsA').appendChild(dot);
+        } else {
+            match.kicksB++; document.getElementById('dotsB').appendChild(dot);
+        }
+        
+        updateScoreUI();
+    }
+
+    function updateScoreUI() {
+        document.getElementById('scoreA').innerText = match.scoreA;
+        document.getElementById('scoreB').innerText = match.scoreB;
+        document.getElementById('kicksA-txt').innerText = match.kicksA;
+        document.getElementById('kicksB-txt').innerText = match.kicksB;
+    }
+
+    function showAlert(text, color) {
+        let box = document.getElementById('alert-box');
+        let textEl = document.getElementById('alert-text');
+        
+        textEl.innerText = text;
+        textEl.style.color = color;
+        
+        box.classList.add('alert-show');
+    }
+
+    async function showChampion(team) {
+        document.getElementById('controls-overlay').classList.remove('hidden');
+        document.getElementById('controls-overlay').innerHTML = `
+            <h1 class="menu-title">🏆 CHAMPION 🏆<br><span style="color:#fff; display:flex; align-items:center; justify-content:center; gap:10px; margin-top:10px;"><div class="marble-flag">${team.flag}</div> ${team.name}</span></h1>
+            <button onclick="location.reload()">🔄 RESTART TOURNAMENT</button>
+        `;
+        sfx.cheer();
+        speak(`We have a champion! Congratulations to ${team.name}!`, true);
+    }
+</script>
+</body>
+</html>
