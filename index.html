@@ -14,45 +14,59 @@
         --ui-bg: #111111;
         --text: #ffffff;
         --red: #ff0000;
-        --scoreboard-bg: #0d120f;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-touch-callout: none; }
 
     body { background-color: #000; color: var(--text); font-family: 'Roboto Condensed', Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100dvh; overflow: hidden; width: 100vw; }
 
-    #game-container { position: relative; width: 100%; max-width: 100%; height: 100%; background-color: var(--ui-bg); display: flex; flex-direction: column; overflow: hidden; }
+    /* GAME CONTAINER - NOW WITH REAL STADIUM CROWD BACKGROUND */
+    #game-container { 
+        position: relative; width: 100%; max-width: 100%; height: 100%; 
+        /* Stadium background image */
+        background: url('https://images.unsplash.com/photo-1518605368461-1ee7c1626084?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center top / cover no-repeat;
+        display: flex; flex-direction: column; overflow: hidden; 
+    }
 
-    /* TOP HEADER */
-    #header { background-color: #000; padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; border-bottom: 1px solid #222; }
+    /* TOP HEADER - GLASSMORPHISM (Dark overlay with blur for text clarity) */
+    #header { 
+        background: rgba(0, 0, 0, 0.65); 
+        backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+        padding: 8px 10px; display: flex; justify-content: space-between; align-items: center; z-index: 10; border-bottom: 1px solid rgba(255,255,255,0.1); 
+    }
     .header-col { display: flex; flex-direction: column; justify-content: center; }
-    .header-title { font-family: 'Oswald', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; }
-    .header-subtitle { font-size: 0.6rem; color: #aaa; text-transform: uppercase; }
-    .tourney-pill { background-color: #1a1a1a; padding: 4px 15px; border-radius: 12px; text-align: center; line-height: 1.1; }
+    .header-title { font-family: 'Oswald', sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.5px; text-shadow: 1px 1px 2px #000; }
+    .header-subtitle { font-size: 0.6rem; color: #ddd; text-transform: uppercase; text-shadow: 1px 1px 2px #000;}
+    .tourney-pill { background-color: rgba(26, 26, 26, 0.8); padding: 4px 15px; border-radius: 12px; text-align: center; line-height: 1.1; border: 1px solid rgba(255,255,255,0.2); }
     .tourney-name { font-size: 0.6rem; color: #fff; font-weight: bold; }
     .tourney-type { font-size: 0.55rem; color: #4ade80; font-weight: bold; }
-    .teams-left { font-size: 0.6rem; color: #aaa; text-transform: uppercase; text-align: right;}
+    .teams-left { font-size: 0.6rem; color: #ddd; text-transform: uppercase; text-align: right; text-shadow: 1px 1px 2px #000;}
 
-    /* SCOREBOARD */
-    #scoreboard { background-color: var(--scoreboard-bg); padding: 12px 10px 8px 10px; display: flex; flex-direction: column; border-bottom: 1px solid #1a2a20; z-index: 10; }
+    /* SCOREBOARD - GLASSMORPHISM */
+    #scoreboard { 
+        background: rgba(0, 0, 0, 0.65); 
+        backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+        padding: 12px 10px 8px 10px; display: flex; flex-direction: column; border-bottom: 2px solid rgba(255, 255, 255, 0.1); z-index: 10; 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
     .score-row { display: flex; justify-content: space-between; align-items: center; width: 100%; }
     .team-info { display: flex; align-items: flex-start; width: 38%; gap: 8px; }
     .team-info.right { flex-direction: row-reverse; text-align: right; }
-    .flag-box { width: 28px; height: 20px; background: #fff; border-radius: 2px; display: flex; justify-content: center; align-items: center; font-size: 18px; overflow: hidden; margin-top: 2px; }
+    .flag-box { width: 28px; height: 20px; background: #fff; border-radius: 2px; display: flex; justify-content: center; align-items: center; font-size: 18px; overflow: hidden; margin-top: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
     .team-details { display: flex; flex-direction: column; width: 100%; }
-    .team-name { font-family: 'Oswald', sans-serif; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
-    .team-stats { font-size: 0.55rem; color: #888; display: flex; align-items: center; gap: 3px; }
+    .team-name { font-family: 'Oswald', sans-serif; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; text-shadow: 1px 1px 2px #000;}
+    .team-stats { font-size: 0.55rem; color: #ccc; display: flex; align-items: center; gap: 3px; text-shadow: 1px 1px 2px #000;}
     .team-info.right .team-stats { justify-content: flex-end; }
     .history-dots { display: flex; gap: 3px; margin-top: 5px; height: 14px; }
     .team-info.right .history-dots { justify-content: flex-end; }
-    .dot { width: 14px; height: 14px; border-radius: 50%; background: #333; display: flex; justify-content: center; align-items: center; font-size: 10px; font-weight: bold; color: white; }
-    .dot.goal { background: #28a745; } .dot.miss { background: #dc3545; }
+    .dot { width: 14px; height: 14px; border-radius: 50%; background: rgba(51, 51, 51, 0.8); display: flex; justify-content: center; align-items: center; font-size: 10px; font-weight: bold; color: white; border: 1px solid rgba(255,255,255,0.2); }
+    .dot.goal { background: #28a745; border-color: #fff; } .dot.miss { background: #dc3545; border-color: #fff; }
     .score-center { display: flex; flex-direction: column; align-items: center; width: 24%; }
-    .score-numbers { font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); line-height: 1; letter-spacing: 1px; }
-    .next-shooter-text { font-size: 0.55rem; color: #888; margin-top: 6px; text-transform: uppercase; text-align: center; white-space: nowrap; }
+    .score-numbers { font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--gold); line-height: 1; letter-spacing: 1px; text-shadow: 2px 2px 4px #000; }
+    .next-shooter-text { font-size: 0.55rem; color: #ddd; margin-top: 6px; text-transform: uppercase; text-align: center; white-space: nowrap; text-shadow: 1px 1px 2px #000;}
 
     /* PITCH AREA & LINES */
-    #pitch { flex: 1; position: relative; background: repeating-linear-gradient(90deg, var(--pitch-dark), var(--pitch-dark) 12.5%, var(--pitch-light) 12.5%, var(--pitch-light) 25%); perspective: 1000px; overflow: hidden; }
+    #pitch { flex: 1; position: relative; background: repeating-linear-gradient(90deg, var(--pitch-dark), var(--pitch-dark) 12.5%, var(--pitch-light) 12.5%, var(--pitch-light) 25%); perspective: 1000px; overflow: hidden; box-shadow: 0 -5px 15px rgba(0,0,0,0.5) inset; }
     .pitch-line { position: absolute; border: 2px solid rgba(255,255,255,0.4); }
     
     .goal-line-h { top: 20%; left: 0%; width: 100%; border-bottom: none; border-left: none; border-right: none; }
@@ -95,9 +109,7 @@
     .p-score { font-family: 'Oswald'; font-size: 0.85rem; color: var(--gold); padding: 0 2px; flex-shrink: 0; }
     .panel-right .p-score { color: #4ade80; }
 
-    /* =========================================
-       BIGGER PLAYER MODEL (1.5x Scaled UP)
-       ========================================= */
+    /* PLAYER MODEL */
     .player-model { position: relative; display: flex; flex-direction: column; align-items: center; filter: drop-shadow(0px 5px 4px rgba(0,0,0,0.5)); }
     .player-model .marble-flag { position: relative; width: 33px; height: 33px; font-size: 20px; z-index: 3; }
     .face { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
@@ -143,7 +155,6 @@
     .kick-l-1 .player-leg.left { animation: kick-l-1 0.18s forwards ease-in; } .kick-l-2 .player-leg.left { animation: kick-l-2 0.3s forwards ease-out; } .kick-l-3 .player-leg.left { animation: kick-l-3 0.15s forwards linear; } .kick-l-4 .player-leg.left { animation: kick-l-4 0.25s forwards ease-in-out; }
     .kick-l-1 .player-body, .kick-l-2 .player-body, .kick-l-3 .player-body, .kick-l-4 .player-body { transform: rotate(12deg); }
 
-    /* DIVE OFFSETS (Adjusted for bigger models) */
     .diving .player-arm.left { transform: rotate(110deg) translateY(-7px) translateX(-6px); } 
     .diving .player-arm.right { transform: rotate(-110deg) translateY(-7px) translateX(6px); } 
     .diving .player-legs { gap: 15px; } 
@@ -162,10 +173,11 @@
     .celebrating .player-arm.right { transform: rotate(-150deg) translateY(-3px); }
     .sad-anim .player-arm.left { transform: rotate(10deg); } .sad-anim .player-arm.right { transform: rotate(-10deg); } .sad-anim .marble-flag { transform: rotate(15deg); } 
 
-    #goalkeeper { position: absolute; top: 20%; left: 50%; transform: translate3d(-50%, -50%, 0); z-index: 3; will-change: transform, left, opacity; transition: opacity 0.3s; }
+    /* UPDATED Keeper position (Even Higher: 15%) */
+    #goalkeeper { position: absolute; top: 15%; left: 50%; transform: translate3d(-50%, -50%, 0); z-index: 3; will-change: transform, left, opacity; transition: opacity 0.3s; }
     #shooter { position: absolute; z-index: 4; will-change: transform, left, top, opacity; opacity: 0; transition: opacity 0.3s; }
     
-    /* ⚽️ BIGGER BALL */
+    /* ⚽️ BALL */
     #ball { position: absolute; top: 45%; left: 50%; width: 22px; height: 22px; border-radius: 50%; transform: translate3d(-50%, -50%, 0); z-index: 2; will-change: transform, left, top, opacity; transition: opacity 0.3s; }
     #ball-inner { font-size: 22px; line-height: 1; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.6)); }
     @keyframes spinBall { 0% { transform: rotate(0deg); } 100% { transform: rotate(1080deg); } }
@@ -182,10 +194,11 @@
     #alert-text { font-family: 'Oswald', sans-serif; font-size: 3.5rem; font-weight: 700; color: #fff; line-height: 1; text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 0 10px 15px rgba(0,0,0,0.8); letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; text-align: center; }
 
     /* MENUS */
-    #controls-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
+    #controls-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 100; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; backdrop-filter: blur(5px); }
     .menu-title { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 20px; line-height: 1.1; text-shadow: 2px 2px 5px #000; text-transform: uppercase; }
     button { background: linear-gradient(to bottom, #28a745, #1e7e34); color: white; border: 2px solid var(--gold); padding: 12px 25px; font-size: 1.2rem; font-family: 'Oswald', sans-serif; border-radius: 5px; cursor: pointer; margin: 10px 0; width: 80%; text-transform: uppercase; box-shadow: 0 4px 6px rgba(0,0,0,0.5); }
     button:active { transform: scale(0.95); } .btn-secondary { background: linear-gradient(to bottom, #444, #222); border-color: #666; }
+    .btn-resume { background: linear-gradient(to bottom, #d4af37, #aa8015); border-color: #fff; box-shadow: 0 0 15px rgba(248, 202, 37, 0.5); }
     .settings-row { display: flex; justify-content: space-between; width: 80%; margin-top: 15px; gap: 10px; } .settings-row button { width: 50%; font-size: 0.9rem; padding: 10px 5px; margin: 0; }
     .hidden { display: none !important; }
     #hud-controls { position: absolute; top: 80px; right: 5px; z-index: 20; display: flex; flex-direction: column; gap: 5px; }
@@ -225,13 +238,17 @@
     @keyframes fall { 0% { transform: translateY(-100px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(360deg); opacity: 0; } }
 </style>
 </head>
-<body>
+<body onload="checkSaveFile()">
 
 <div id="game-container">
     <div id="controls-overlay">
         <h1 class="menu-title">FIFA WORLD CUP<br>SHOOTOUT</h1>
-        <p style="margin-bottom: 20px; color: #ccc;">32-TEAM KNOCKOUT SIMULATION</p>
-        <button id="btn-start" onclick="startGame()">▶ START TOURNAMENT</button>
+        <p style="margin-bottom: 20px; color: #ccc; text-shadow: 1px 1px 2px #000;">32-TEAM KNOCKOUT SIMULATION</p>
+        
+        <!-- RESUME BUTTON -->
+        <button id="btn-resume" class="btn-resume hidden" onclick="resumeGame()">▶ RESUME TOURNAMENT</button>
+        <button id="btn-start" onclick="startGame()">▶ NEW TOURNAMENT</button>
+        
         <div class="settings-row">
             <button id="btn-sound" class="btn-secondary" onclick="toggleSound()">🔊 Sound: ON</button>
             <button id="btn-tts" class="btn-secondary" onclick="toggleTTS()">🗣️ TTS: ON</button>
@@ -241,20 +258,19 @@
         </div>
     </div>
 
-    <!-- FULL SCROLLABLE BRACKET SCREEN -->
     <div id="bracket-screen">
         <div class="bracket-header">KNOCKOUT STAGE</div>
         <div class="bracket-sub" id="bracket-round-text">ROUND OF 32</div>
         <div id="bracket-scroll-area"></div>
     </div>
     
-    <!-- EPIC CHAMPION OVERLAY -->
     <div id="champion-overlay">
         <div class="champ-title">CHAMPION</div>
         <div class="champ-team" id="champ-team-box"></div>
         <button class="champ-btn" onclick="location.reload()">🔄 PLAY AGAIN</button>
     </div>
 
+    <!-- HEADER -->
     <div id="header">
         <div class="header-col header-col-left">
             <div class="header-title">FIFA WORLD CUP SHOOTOUT</div>
@@ -272,6 +288,7 @@
         </div>
     </div>
 
+    <!-- SCOREBOARD -->
     <div id="scoreboard">
         <div class="score-row">
             <div class="team-info" id="teamA-info">
@@ -297,16 +314,14 @@
         <div class="next-shooter-text">NEXT: <span id="next-name">...</span> TO SHOOT</div>
     </div>
 
-    <!-- PITCH & GAMEPLAY LAYER -->
+    <!-- PITCH -->
     <div id="pitch">
-        <!-- Lines -->
         <div class="pitch-line goal-line-h"></div>
         <div class="pitch-line penalty-box"></div>
         <div class="pitch-line half-way-line"></div>
         <div class="pitch-line penalty-arc"></div>
         <div class="pitch-line penalty-spot"></div>
         
-        <!-- ORIGINAL GOAL POST -->
         <div id="goal">
             <svg width="100%" height="100%" style="position:absolute; top:0; left:0; z-index: 1; overflow: visible;">
                 <pattern id="net" width="8" height="8" patternUnits="userSpaceOnUse">
@@ -331,12 +346,10 @@
             <div class="goal-frame-right"></div>
         </div>
         
-        <!-- YouTube Banner -->
         <div id="yt-banner-container">
             <div id="yt-social-text">HIT LIKE 👍</div>
         </div>
         
-        <!-- Bottom Match Info Panels -->
         <div class="match-panel panel-left" id="next-match-panel">
             <div class="panel-header">NEXT MATCH</div>
             <div class="panel-content">
@@ -360,7 +373,6 @@
             <div id="teamB-queue" class="queue-team"></div>
         </div>
 
-        <!-- CHARACTERS -->
         <div id="goalkeeper"></div> 
         <div id="ball"><div id="ball-inner">⚽️</div></div>
         <div id="shooter"></div>
@@ -369,7 +381,6 @@
         <div id="alert-box"><div id="alert-text">GOAL!</div></div>
         <div id="hud-controls"><div class="hud-btn" onclick="togglePause()" id="btn-hud-pause">⏸</div><div class="hud-btn" onclick="skipMatch()">⏭</div></div>
     </div>
-
 </div>
 
 <script>
@@ -404,7 +415,7 @@
     ];
 
     /*===================================================================
-      2. STATE & AUDIO FIXES
+      2. STATE, AUDIO & LOCAL STORAGE
     ===================================================================*/
     let audioCtx = null; let synth = window.speechSynthesis;
     let settings = { sound: true, tts: true, speedMode: 'NORMAL', speedMult: 1 };
@@ -412,6 +423,18 @@
     let match = { teamA: null, teamB: null, scoreA: 0, scoreB: 0, kicksA: 0, kicksB: 0, turn: 'A', isSuddenDeath: false };
     let timeouts = []; let stateResolver = null; let socialIndex = 0;
     let allMatches = [];
+    let currentShotData = null; // Store shot info to check if top or bottom save
+
+    // SAVE SYSTEM FUNCTIONS
+    function checkSaveFile() {
+        let saved = localStorage.getItem('fifaShootoutSave');
+        if (saved) { document.getElementById('btn-resume').classList.remove('hidden'); }
+    }
+    function saveGameState(currentIdx) {
+        let state = { matches: allMatches, currentIndex: currentIdx };
+        localStorage.setItem('fifaShootoutSave', JSON.stringify(state));
+    }
+    function clearGameState() { localStorage.removeItem('fifaShootoutSave'); }
 
     setInterval(() => {
         let el = document.getElementById('yt-social-text'); if(!el) return;
@@ -422,34 +445,18 @@
         socialIndex = (socialIndex + 1) % ytStrings.length;
     }, 4500);
 
-    // FIXED: Reliable Audio Initialization tied directly to button click
     function initAudioEngine() {
         if (!settings.sound) return;
         try {
             let AudioContext = window.AudioContext || window.webkitAudioContext;
             if (!audioCtx) { audioCtx = new AudioContext(); }
             if (audioCtx.state === 'suspended') { audioCtx.resume(); }
-            
-            // Play empty sound to truly unlock mobile browsers
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-            gain.gain.value = 0;
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.01);
-
-            // Unlock TTS
-            let u = new SpeechSynthesisUtterance('');
-            u.volume = 0;
-            synth.speak(u);
+            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); gain.gain.value = 0;
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.01);
+            let u = new SpeechSynthesisUtterance(''); u.volume = 0; synth.speak(u);
         } catch (e) {}
     }
-
-    // Helper to ensure audio runs even if OS suspends it temporarily
-    function checkAudio() {
-        if (!audioCtx) return false;
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        return true;
-    }
+    function checkAudio() { if (!audioCtx) return false; if (audioCtx.state === 'suspended') audioCtx.resume(); return true; }
 
     function playNoiseFilter(duration, vol=0.1, type='lowpass', freq=1000) {
         if (!settings.sound || !checkAudio()) return;
@@ -513,8 +520,7 @@
         kick: () => { 
             if (!settings.sound || !checkAudio()) return; 
             try {
-                let t = audioCtx.currentTime; 
-                let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); 
+                let t = audioCtx.currentTime; let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); 
                 osc.type = 'sine'; osc.frequency.setValueAtTime(300, t); osc.frequency.exponentialRampToValueAtTime(40, t + 0.1); 
                 gain.gain.setValueAtTime(1, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.15); 
                 osc.connect(gain); gain.connect(audioCtx.destination); osc.start(t); osc.stop(t + 0.15); 
@@ -525,8 +531,7 @@
         save: () => {
             if (!settings.sound || !checkAudio()) return;
             try {
-                let t = audioCtx.currentTime; 
-                let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+                let t = audioCtx.currentTime; let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
                 osc.type = 'square'; osc.frequency.setValueAtTime(150, t); osc.frequency.exponentialRampToValueAtTime(50, t + 0.1);
                 gain.gain.setValueAtTime(0.4, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
                 osc.connect(gain); gain.connect(audioCtx.destination); osc.start(t); osc.stop(t + 0.15);
@@ -591,7 +596,6 @@
                     g.gain.setValueAtTime(0.2, tStart + tDur - 0.1); g.gain.linearRampToValueAtTime(0, tStart + tDur);
                     osc.connect(g); g.connect(audioCtx.destination); osc.start(tStart); osc.stop(tStart + tDur);
                 };
-                // Epic Fanfare Sequence
                 playNote(523.25, t, 0.2); playNote(659.25, t+0.2, 0.2); playNote(783.99, t+0.4, 0.2); playNote(1046.50, t+0.6, 0.8);
             } catch(e) {}
         }
@@ -606,41 +610,21 @@
         setTimeout(() => synth.speak(u), 0); lastSpeechTime = now;
     }
 
-    // ===============================================
-    // SHORT & SWEET CONTEXT-AWARE COMMENTARY
-    // ===============================================
     function getPreKickCommentary(team) {
         let remainA = 5 - match.kicksA; let remainB = 5 - match.kicksB;
-        
-        let couldWinA = (match.scoreA + 1 > match.scoreB + remainB);
-        let couldWinB = (match.scoreB + 1 > match.scoreA + remainA);
-        if ((match.turn === 'A' && couldWinA) || (match.turn === 'B' && couldWinB)) {
-            return ["For the win!", "Championship kick!", "To win it all!"][Math.floor(Math.random()*3)];
-        }
-        
-        let mustScoreA = (match.scoreA + remainA - 1 < match.scoreB);
-        let mustScoreB = (match.scoreB + remainB - 1 < match.scoreA);
-        if ((match.turn === 'A' && mustScoreA) || (match.turn === 'B' && mustScoreB)) {
-            return ["Must score!", "Do or die!", "Has to go in."][Math.floor(Math.random()*3)];
-        }
-        
-        let p = ["Steps up.", "Looking focused.", "Big moment.", "Ready.", `${team.name} to take.`];
-        return p[Math.floor(Math.random()*p.length)];
+        let couldWinA = (match.scoreA + 1 > match.scoreB + remainB); let couldWinB = (match.scoreB + 1 > match.scoreA + remainA);
+        if ((match.turn === 'A' && couldWinA) || (match.turn === 'B' && couldWinB)) return ["For the win!", "Championship kick!", "To win it all!"][Math.floor(Math.random()*3)];
+        let mustScoreA = (match.scoreA + remainA - 1 < match.scoreB); let mustScoreB = (match.scoreB + remainB - 1 < match.scoreA);
+        if ((match.turn === 'A' && mustScoreA) || (match.turn === 'B' && mustScoreB)) return ["Must score!", "Do or die!", "Has to go in."][Math.floor(Math.random()*3)];
+        let p = ["Steps up.", "Looking focused.", "Big moment.", "Ready.", `${team.name} to take.`]; return p[Math.floor(Math.random()*p.length)];
     }
 
     function getPostKickCommentary(result, isTop) {
         let r = Math.random();
-        if (result === 'goal') {
-            if (isTop) return ["Top corner!", "Unstoppable!", "Upper 90!", "What a strike!"][Math.floor(r*4)];
-            return ["Goal!", "Slotted home.", "Coolly done.", "Right in."][Math.floor(r*4)];
-        } else if (result === 'save') {
-            if (isTop) return ["Flying save!", "Brilliant keeping!", "Tipped over!"][Math.floor(r*3)];
-            return ["Great block!", "Keeper guessed right!", "Denied!"][Math.floor(r*3)];
-        } else if (result === 'post') {
-            return ["Off the post!", "Rattles the woodwork!", "So close!"][Math.floor(r*3)];
-        } else {
-            return ["Wide!", "Missed it completely.", "Terrible penalty."][Math.floor(r*3)];
-        }
+        if (result === 'goal') { if (isTop) return ["Top corner!", "Unstoppable!", "Upper 90!", "What a strike!"][Math.floor(r*4)]; return ["Goal!", "Slotted home.", "Coolly done.", "Right in."][Math.floor(r*4)]; }
+        else if (result === 'save') { if (isTop) return ["Flying save!", "Brilliant keeping!", "Tipped over!"][Math.floor(r*3)]; return ["Great block!", "Keeper guessed right!", "Denied!"][Math.floor(r*3)]; }
+        else if (result === 'post') return ["Off the post!", "Rattles the woodwork!", "So close!"][Math.floor(r*3)];
+        else return ["Wide!", "Missed it completely.", "Terrible penalty."][Math.floor(r*3)];
     }
 
     function toggleSound() { initAudioEngine(); settings.sound = !settings.sound; document.getElementById('btn-sound').innerText = settings.sound ? "🔊 Sound: ON" : "🔇 Sound: OFF"; }
@@ -681,8 +665,14 @@
     function getRoundName(idx) { if(idx < 16) return "ROUND OF 32"; if(idx < 24) return "ROUND OF 16"; if(idx < 28) return "QUARTERFINALS"; if(idx < 30) return "SEMIFINALS"; return "FINAL"; }
 
     function centerBracketOnMatch(idx) {
-        let mBox = document.getElementById(`b-match-${idx}`); let scrollArea = document.getElementById('bracket-scroll-area');
-        if (mBox && scrollArea) { let offsetLeft = mBox.offsetLeft; let targetScroll = offsetLeft - (scrollArea.getBoundingClientRect().width / 2) + (mBox.offsetWidth / 2); scrollArea.scrollTo({ left: targetScroll, behavior: 'smooth' }); }
+        let mBox = document.getElementById(`b-match-${idx}`); 
+        let scrollArea = document.getElementById('bracket-scroll-area');
+        if (mBox && scrollArea) { 
+            let mRect = mBox.getBoundingClientRect();
+            let sRect = scrollArea.getBoundingClientRect();
+            let targetScroll = scrollArea.scrollLeft + (mRect.left - sRect.left) - (sRect.width / 2) + (mRect.width / 2);
+            scrollArea.scrollTo({ left: targetScroll, behavior: 'smooth' }); 
+        }
     }
 
     async function showBracketScreen_PreMatch(idx) {
@@ -746,19 +736,39 @@
     }
 
     async function startGame() {
-        initAudioEngine(); // FORCE INITIALIZE AUDIO ON CLICK
-        document.getElementById('controls-overlay').classList.add('hidden');
+        clearGameState(); initAudioEngine(); document.getElementById('controls-overlay').classList.add('hidden');
         let teams = [...ALL_TEAMS].sort(() => Math.random() - 0.5).slice(0, 32); 
         generateBracketHTML(); allMatches = new Array(31).fill(null).map(() => ({A: null, B: null}));
         for(let i=0; i<16; i++) { allMatches[i].A = teams[i*2]; allMatches[i].B = teams[i*2 + 1]; updateMatchDOM(i, allMatches[i].A, allMatches[i].B); }
         
         speak("Welcome to the shootout!", true); await delay(1000); 
         document.getElementById('bracket-screen').classList.add('show'); await showBracketScreen_PreMatch(0);
-        runTournamentLoop();
+        runTournamentLoop(0);
     }
 
-    async function runTournamentLoop() {
-        for(let i = 0; i < 31; i++) {
+    async function resumeGame() {
+        initAudioEngine(); document.getElementById('controls-overlay').classList.add('hidden');
+        let saved = JSON.parse(localStorage.getItem('fifaShootoutSave'));
+        allMatches = saved.matches; let startIdx = saved.currentIndex;
+        generateBracketHTML();
+        
+        for(let i=0; i<31; i++) {
+            updateMatchDOM(i, allMatches[i].A, allMatches[i].B);
+            if(allMatches[i].scoreA !== undefined) {
+                document.getElementById(`b-score-A-${i}`).innerText = allMatches[i].scoreA;
+                document.getElementById(`b-score-B-${i}`).innerText = allMatches[i].scoreB;
+                let winner = allMatches[i].scoreA > allMatches[i].scoreB ? 'A' : 'B';
+                document.getElementById(`m-${i}-t${winner}`).classList.add('winner');
+            }
+        }
+        
+        speak("Resuming tournament!", true); await delay(1000); 
+        document.getElementById('bracket-screen').classList.add('show'); await showBracketScreen_PreMatch(startIdx);
+        runTournamentLoop(startIdx);
+    }
+
+    async function runTournamentLoop(startIdx) {
+        for(let i = startIdx; i < 31; i++) {
             let matchup = allMatches[i]; tournament.matchNumber = i + 1; tournament.roundName = getRoundName(i);
             document.getElementById('round-text').innerText = tournament.roundName; document.getElementById('bracket-round-text').innerText = tournament.roundName; document.getElementById('match-number').innerText = tournament.matchNumber;
             let calcTeamsLeft = i < 16 ? 32 : (i < 24 ? 16 : (i < 28 ? 8 : (i < 30 ? 4 : 2)));
@@ -766,11 +776,17 @@
 
             updateMatchPanels(i);
             let winner = await runMatch(matchup.A, matchup.B);
+            
+            allMatches[i].scoreA = match.scoreA; allMatches[i].scoreB = match.scoreB;
+            
             updateMatchPanels(i);
             await showBracketScreen_PostMatch(i, match, winner);
             
             let nextMatchIdx = getNextMatch(i); if (nextMatchIdx !== null) { let slot = i % 2 === 0 ? 'A' : 'B'; allMatches[nextMatchIdx][slot] = winner; }
-            if (i + 1 < 31) { await showBracketScreen_PreMatch(i + 1); } else { document.getElementById('bracket-screen').classList.remove('show'); await showChampion(winner); }
+            
+            saveGameState(i + 1);
+
+            if (i + 1 < 31) { await showBracketScreen_PreMatch(i + 1); } else { clearGameState(); document.getElementById('bracket-screen').classList.remove('show'); await showChampion(winner); }
         }
     }
 
@@ -815,7 +831,7 @@
             s.style.transition = 'top 0.8s linear, left 0.8s linear'; s.style.top = runUpTop; s.style.left = runUpLeft;
             await delay(800); s.classList.remove('walking'); sModel.classList.add('idle-breathe');
             
-            let shotData = calcShot();
+            currentShotData = calcShot(); // Save to global variable
             
             speak(getPreKickCommentary(currentTeam), true);
             await delay(1200); 
@@ -824,38 +840,28 @@
 
             sModel.classList.remove('idle-breathe'); sModel.classList.add('running');
             s.style.transition = 'top 0.4s cubic-bezier(0.25, 1, 0.5, 1), left 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
-            s.style.top = '47%'; s.style.left = (shotData.foot === 'r') ? '48%' : '52%'; 
+            s.style.top = '47%'; s.style.left = (currentShotData.foot === 'r') ? '48%' : '52%'; 
             await delay(400); sModel.classList.remove('running');
             
-            await executeKickAnimation(shotData); handleResult(shotData.result, shotData.shot.y === 1);
+            await executeKickAnimation(currentShotData); 
+            handleResult(currentShotData.result, currentShotData.shot.y === 1);
             
             await delay(2000); 
             s.style.opacity = '0'; await delay(1000);
 
             let winner = checkWinCondition(); if (winner) break;
             
-            if (match.turn === 'A') { 
-                match.turn = 'B'; 
-            } else { 
+            if (match.turn === 'A') { match.turn = 'B'; } else { 
                 match.turn = 'A'; 
-                // SUDDEN DEATH POP-UP LOGIC
                 if (match.kicksA === 5 && match.scoreA === match.scoreB && !match.isSuddenDeath) { 
-                    match.isSuddenDeath = true; 
-                    sfx.sharpWhistle();
-                    showAlert("SUDDEN DEATH!", "#ff0000");
-                    speak("Sudden Death! Every kick counts now.", true);
-                    await delay(3000);
+                    match.isSuddenDeath = true; sfx.sharpWhistle(); showAlert("SUDDEN DEATH!", "#ff0000"); speak("Sudden Death! Every kick counts now.", true); await delay(3000);
                 } 
             }
             document.getElementById('alert-box').classList.remove('alert-show');
         }
 
         let winner = match.scoreA > match.scoreB ? match.teamA : match.teamB;
-        // Don't show generic alert for the tournament winner
-        if (tournament.matchNumber < 31) {
-            speak(`${winner.name} wins!`, true); sfx.win(); showAlert(`${winner.flag} WINS!`, '#f8ca25'); sfx.cheer(); 
-            await delay(2000);
-        }
+        if (tournament.matchNumber < 31) { speak(`${winner.name} wins!`, true); sfx.win(); showAlert(`${winner.flag} WINS!`, '#f8ca25'); sfx.cheer(); await delay(2000); }
         document.getElementById('alert-box').classList.remove('alert-show');
         document.getElementById('shooter').style.opacity = '0'; document.getElementById('goalkeeper').style.opacity = '0'; document.getElementById('ball').style.opacity = '0';
         return winner;
@@ -882,7 +888,9 @@
             s.innerHTML = getPlayerHTML(shooterFlag, false); g.innerHTML = getPlayerHTML(keeperFlag, true);
             b.style.transition = 'none'; g.style.transition = 'none'; s.style.transition = 'none'; s.style.opacity = '1'; g.style.opacity = '1'; b.style.opacity = '1';
             b.style.top = '45%'; b.style.left = '50%'; b.style.transform = 'translate3d(-50%, -50%, 0) scale(1)'; bInner.classList.remove('spin'); 
-            g.style.top = '20%'; g.style.left = '50%'; g.style.transform = 'translate3d(-50%, -50%, 0)'; 
+            
+            // KEEPER EVEN HIGHER NOW (Top 15%)
+            g.style.top = '15%'; g.style.left = '50%'; g.style.transform = 'translate3d(-50%, -50%, 0)'; 
             s.style.top = startTop; s.style.left = startLeft; s.style.transform = 'translate3d(-50%, -50%, 0) scale(1)'; setTimeout(resolve, 20); 
         });
     }
@@ -910,20 +918,20 @@
         else if (data.result === 'post') { 
             targetLeft = data.shot.x === -1 ? 26 : (data.shot.x === 1 ? 74 : 50); 
             targetTop = data.shot.y === 1 ? 2 : 15; 
-            if(data.shot.x === 0 && data.shot.y === 1) targetTop = 2; // Crossbar
+            if(data.shot.x === 0 && data.shot.y === 1) targetTop = 2; 
         } 
         else if (data.result === 'miss') { 
-            finalScale = 0.3; 
-            if (data.shot.y === 1) { targetTop = -25; targetLeft = 50 + (Math.random() * 40 - 20); } // Sky high
-            else if (data.shot.x === -1) { targetTop = 8; targetLeft = -15; } // Wide left
-            else { targetTop = 8; targetLeft = 115; } // Wide right
+            finalScale = 0.35; 
+            if (data.shot.y === 1) { targetTop = -2; targetLeft = 50 + (Math.random() * 30 - 15); } 
+            else if (data.shot.x === -1) { targetTop = 10; targetLeft = 10; } 
+            else { targetTop = 10; targetLeft = 90; } 
         }
 
         let gkLeft = 50 + (data.gk.x * 19); 
-        // FIX: Keeper top dive exactly matching ball level (lowered slightly from previous)
-        let gkTop = data.gk.y === 1 ? 7 : 16; 
+        // FIXED KEEPER HIGH DIVE (From 5 to 8 to perfectly match ball at top corners)
+        let gkTop = data.gk.y === 1 ? 8 : 14; 
         let rot = data.gk.x * 75;
-        if(data.gk.y === 1 && data.gk.x === 0) rot = 0; // Jump straight up
+        if(data.gk.y === 1 && data.gk.x === 0) rot = 0;
 
         b.style.top = targetTop + '%'; b.style.left = targetLeft + '%'; b.style.transform = `translate3d(-50%, -50%, 0) scale(${finalScale})`;
         g.style.top = gkTop + '%'; g.style.left = gkLeft + '%'; g.style.transform = `translate3d(-50%, -50%, 0) rotate(${rot}deg)`;
@@ -944,20 +952,37 @@
             if (match.turn === 'A') match.scoreA++; else match.scoreB++;
             sfx.net(); sfx.cheer(); showAlert("GOAL!", "#4ade80");
             sFace.className = 'face happy'; sModel.classList.add('celebrating'); gFace.className = 'face sad'; gModel.classList.add('sad-anim'); dot.classList.add('goal'); dot.innerText = '✓';
-        } else if (result === 'save') {
+        } 
+        else if (result === 'save') {
             bInner.classList.remove('spin'); sfx.save(); showAlert("SAVE!", "#ff3b30");
-            b.style.transition = 'top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out'; let currentLeft = parseFloat(b.style.left);
-            if (currentLeft < 40) { b.style.top = '30%'; b.style.left = '10%'; } else if (currentLeft > 60) { b.style.top = '30%'; b.style.left = '90%'; } else { b.style.top = '35%'; b.style.left = (50 + (Math.random()*10 - 5)) + '%'; }
-            b.style.transform = `translate3d(-50%, -50%, 0) scale(0.6)`;
+            b.style.transition = 'top 0.5s ease-out, left 0.5s ease-out, transform 0.5s ease-out'; 
+            let currentLeft = parseFloat(b.style.left);
+            
+            // NEW LOGIC: TOP SAVE VS BOTTOM SAVE
+            if (isTop) {
+                // Ball deflects high and wide into the crowd/stands
+                b.style.top = '-15%'; 
+                b.style.left = currentLeft > 50 ? '85%' : '15%'; 
+                b.style.transform = `translate3d(-50%, -50%, 0) scale(0.4)`;
+            } else {
+                // Bottom saves bounce closer on the ground
+                if (currentLeft < 45) { b.style.top = '25%'; b.style.left = '35%'; } 
+                else if (currentLeft > 55) { b.style.top = '25%'; b.style.left = '65%'; } 
+                else { b.style.top = '28%'; b.style.left = (50 + (Math.random()*10 - 5)) + '%'; }
+                b.style.transform = `translate3d(-50%, -50%, 0) scale(0.65)`;
+            }
+            
             gFace.className = 'face happy'; gModel.classList.add('celebrating'); sFace.className = 'face sad'; sModel.classList.add('sad-anim'); dot.classList.add('miss'); dot.innerText = '✗';
-        } else if (result === 'post') {
+        } 
+        else if (result === 'post') {
             let exp = document.getElementById('explosion'); exp.style.top = b.style.top; exp.style.left = b.style.left;
             exp.classList.remove('explode-anim'); void exp.offsetWidth; exp.classList.add('explode-anim');
             bInner.classList.remove('spin'); sfx.post(); sfx.aww(); showAlert("POST!", "#f8ca25");
             b.style.transition = 'top 0.5s ease-out, left 0.5s ease-out'; let currentLeft = parseFloat(b.style.left);
             b.style.top = '30%'; b.style.left = (currentLeft > 50 ? 80 : 20) + '%'; 
             gFace.className = 'face happy'; gModel.classList.add('celebrating'); sFace.className = 'face sad'; sModel.classList.add('sad-anim'); dot.classList.add('miss'); dot.innerText = '✗';
-        } else {
+        } 
+        else {
             sfx.aww(); showAlert("MISS!", "#aaaaaa");
             gFace.className = 'face happy'; gModel.classList.add('celebrating'); sFace.className = 'face sad'; sModel.classList.add('sad-anim'); dot.classList.add('miss'); dot.innerText = '✗';
         }
@@ -968,7 +993,6 @@
     function updateScoreUI() { document.getElementById('scoreA').innerText = match.scoreA; document.getElementById('scoreB').innerText = match.scoreB; document.getElementById('kicksA-txt').innerText = match.kicksA; document.getElementById('kicksB-txt').innerText = match.kicksB; }
     function showAlert(text, color) { let box = document.getElementById('alert-box'); let textEl = document.getElementById('alert-text'); textEl.innerText = text; textEl.style.color = color; box.classList.add('alert-show'); }
     
-    // EPIC CHAMPION ANIMATION LOGIC
     async function showChampion(team) { 
         let overlay = document.getElementById('champion-overlay');
         let teamBox = document.getElementById('champ-team-box');
@@ -979,7 +1003,6 @@
         sfx.champion(); sfx.cheer(); 
         speak(`We have a champion! Congratulations to ${team.name}!`, true);
         
-        // Falling Confetti & Trophies effect
         let emojis = ['🏆', '🥇', '✨', '🎉', team.flag];
         for(let i=0; i<40; i++) {
             let el = document.createElement('div');
@@ -991,11 +1014,7 @@
             overlay.appendChild(el);
         }
         
-        // Loop some pop sounds for fireworks effect
-        for(let i=0; i<5; i++) {
-            await delay(500);
-            sfx.pop();
-        }
+        for(let i=0; i<5; i++) { await delay(500); sfx.pop(); }
     }
 </script>
 </body>
