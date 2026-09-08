@@ -61,15 +61,11 @@
     .half-way-line { top: 60%; left: 0%; width: 100%; border-bottom: none; border-left: none; border-right: none; }
     .penalty-arc { top: 60%; left: 35%; width: 30%; height: 12%; border-top: none; border-radius: 0 0 100px 100px; }
 
-    /* =========================================
-       ORIGINAL GOAL POST (Perfect visuals restored)
-       ========================================= */
+    /* GOAL POST */
     #goal { position: absolute; top: 2%; left: 26%; width: 48%; height: 18%; z-index: 1; }
-    
     .goal-frame-top { position: absolute; top: 0; left: 0; width: 100%; height: 6px; background: #fff; border: 2px solid #555; z-index: 4; border-radius: 2px; }
     .goal-frame-left { position: absolute; top: 0; left: -3px; width: 6px; height: 100%; background: #fff; border: 2px solid #555; z-index: 4; border-radius: 2px; }
     .goal-frame-right { position: absolute; top: 0; right: -3px; width: 6px; height: 100%; background: #fff; border: 2px solid #555; z-index: 4; border-radius: 2px; }
-    
     @keyframes shakeGoal { 0% { transform: translateX(0); } 20% { transform: translateX(-3px) translateY(1px); } 40% { transform: translateX(3px) translateY(-1px); } 60% { transform: translateX(-2px); } 80% { transform: translateX(2px); } 100% { transform: translateX(0); } } .shake { animation: shakeGoal 0.4s ease-in-out; }
 
     /* QUEUE */
@@ -99,30 +95,36 @@
     .p-score { font-family: 'Oswald'; font-size: 0.85rem; color: var(--gold); padding: 0 2px; flex-shrink: 0; }
     .panel-right .p-score { color: #4ade80; }
 
-    /* FAKE 3D STICKMAN & SMOOTH ANIMATIONS */
+    /* =========================================
+       BIGGER PLAYER MODEL (1.5x Scaled UP)
+       ========================================= */
     .player-model { position: relative; display: flex; flex-direction: column; align-items: center; filter: drop-shadow(0px 5px 4px rgba(0,0,0,0.5)); }
-    .player-model .marble-flag { position: relative; width: 22px; height: 22px; font-size: 14px; z-index: 3; }
+    .player-model .marble-flag { position: relative; width: 33px; height: 33px; font-size: 20px; z-index: 3; }
     .face { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; }
-    .eyes { display: flex; gap: 4px; margin-top: -2px; } .eye { width: 5px; height: 5px; background: #000; border-radius: 50%; border: 1.5px solid #fff; box-sizing: border-box; }
-    .mouth { width: 7px; height: 2.5px; background: #000; border-radius: 2px; margin-top: 2px; border: 1.5px solid #fff; box-sizing: content-box; }
-    .face.happy .mouth { width: 8px; height: 4px; border-radius: 0 0 8px 8px; margin-top: 1px; } .face.sad .mouth { width: 8px; height: 2.5px; border-radius: 8px 8px 0 0; margin-top: 3px; } .face.sad .eye { height: 2px; margin-top: 2px; border-radius: 2px; }
-    .player-body { width: 10px; height: 14px; background: linear-gradient(135deg, #ffffff, #aaaaaa); border: 1px solid #555; border-radius: 4px; margin-top: -3px; z-index: 2; transition: transform 0.2s; }
-    .player-arms { position: absolute; top: 19px; width: 20px; display: flex; justify-content: space-between; z-index: 1; }
-    .player-arm { width: 4px; height: 11px; background: linear-gradient(135deg, #ffffff, #aaaaaa); border: 1px solid #555; border-radius: 2px; transition: transform 0.2s ease, top 0.2s; }
+    .eyes { display: flex; gap: 6px; margin-top: -3px; } 
+    .eye { width: 7px; height: 7px; background: #000; border-radius: 50%; border: 2px solid #fff; box-sizing: border-box; }
+    .mouth { width: 10px; height: 3px; background: #000; border-radius: 3px; margin-top: 3px; border: 2px solid #fff; box-sizing: content-box; }
+    .face.happy .mouth { width: 12px; height: 6px; border-radius: 0 0 12px 12px; margin-top: 1px; } 
+    .face.sad .mouth { width: 12px; height: 3px; border-radius: 12px 12px 0 0; margin-top: 4px; } 
+    .face.sad .eye { height: 3px; margin-top: 3px; border-radius: 3px; }
+    
+    .player-body { width: 15px; height: 21px; background: linear-gradient(135deg, #ffffff, #aaaaaa); border: 1px solid #555; border-radius: 6px; margin-top: -4px; z-index: 2; transition: transform 0.2s; }
+    .player-arms { position: absolute; top: 29px; width: 30px; display: flex; justify-content: space-between; z-index: 1; }
+    .player-arm { width: 6px; height: 16px; background: linear-gradient(135deg, #ffffff, #aaaaaa); border: 1px solid #555; border-radius: 3px; transition: transform 0.2s ease, top 0.2s; }
     .player-arm.left { transform: rotate(20deg); } .player-arm.right { transform: rotate(-20deg); }
-    .player-legs { display: flex; gap: 3px; margin-top: -2px; z-index: 1; transition: gap 0.2s; }
-    .player-leg { width: 4px; height: 12px; background: linear-gradient(135deg, #333, #111); border-radius: 2px; transition: transform 0.15s ease; transform-origin: top center; }
+    .player-legs { display: flex; gap: 5px; margin-top: -3px; z-index: 1; transition: gap 0.2s; }
+    .player-leg { width: 6px; height: 18px; background: linear-gradient(135deg, #333, #111); border-radius: 3px; transition: transform 0.15s ease; transform-origin: top center; }
 
     /* Basic Animations */
-    @keyframes breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-2px); } } .idle-breathe { animation: breathe 1.2s ease-in-out infinite; }
-    @keyframes keeperReady { 0%, 100% { transform: translateX(0) scaleY(1); } 25% { transform: translateX(-3px) scaleY(0.95); } 75% { transform: translateX(3px) scaleY(0.95); } } .keeper-ready { animation: keeperReady 1s ease-in-out infinite; }
+    @keyframes breathe { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } } .idle-breathe { animation: breathe 1.2s ease-in-out infinite; }
+    @keyframes keeperReady { 0%, 100% { transform: translateX(0) scaleY(1); } 25% { transform: translateX(-4px) scaleY(0.95); } 75% { transform: translateX(4px) scaleY(0.95); } } .keeper-ready { animation: keeperReady 1s ease-in-out infinite; }
     @keyframes walkLeg { 0%, 100% { transform: rotate(15deg); } 50% { transform: rotate(-15deg); } }
     .walking .player-leg.left { animation: walkLeg 0.4s infinite linear; } .walking .player-leg.right { animation: walkLeg 0.4s infinite linear reverse; }
     @keyframes sprintLegL { 0%, 100% { transform: rotate(35deg); } 50% { transform: rotate(-35deg); } }
     @keyframes sprintLegR { 0%, 100% { transform: rotate(-35deg); } 50% { transform: rotate(35deg); } }
     @keyframes sprintArmL { 0%, 100% { transform: rotate(-45deg); } 50% { transform: rotate(45deg); } }
     @keyframes sprintArmR { 0%, 100% { transform: rotate(45deg); } 50% { transform: rotate(-45deg); } }
-    @keyframes sprintBody { 0%, 100% { transform: translateY(0) rotate(8deg); } 50% { transform: translateY(-4px) rotate(-8deg); } }
+    @keyframes sprintBody { 0%, 100% { transform: translateY(0) rotate(8deg); } 50% { transform: translateY(-5px) rotate(-8deg); } }
     .running .player-leg.left { animation: sprintLegL 0.22s infinite linear; } .running .player-leg.right { animation: sprintLegR 0.22s infinite linear; }
     .running .player-arm.left { animation: sprintArmL 0.22s infinite linear; } .running .player-arm.right { animation: sprintArmR 0.22s infinite linear; }
     .running { animation: sprintBody 0.22s infinite ease-in-out; }
@@ -141,20 +143,31 @@
     .kick-l-1 .player-leg.left { animation: kick-l-1 0.18s forwards ease-in; } .kick-l-2 .player-leg.left { animation: kick-l-2 0.3s forwards ease-out; } .kick-l-3 .player-leg.left { animation: kick-l-3 0.15s forwards linear; } .kick-l-4 .player-leg.left { animation: kick-l-4 0.25s forwards ease-in-out; }
     .kick-l-1 .player-body, .kick-l-2 .player-body, .kick-l-3 .player-body, .kick-l-4 .player-body { transform: rotate(12deg); }
 
-    .diving .player-arm.left { transform: rotate(110deg) translateY(-5px) translateX(-4px); } .diving .player-arm.right { transform: rotate(-110deg) translateY(-5px) translateX(4px); } .diving .player-legs { gap: 10px; } .diving .player-leg.left { transform: rotate(35deg); } .diving .player-leg.right { transform: rotate(-35deg); }
+    /* DIVE OFFSETS (Adjusted for bigger models) */
+    .diving .player-arm.left { transform: rotate(110deg) translateY(-7px) translateX(-6px); } 
+    .diving .player-arm.right { transform: rotate(-110deg) translateY(-7px) translateX(6px); } 
+    .diving .player-legs { gap: 15px; } 
+    .diving .player-leg.left { transform: rotate(35deg); } 
+    .diving .player-leg.right { transform: rotate(-35deg); }
     
-    /* ADJUSTED High Dive Animation (Slightly Lower) */
-    .diving-high .player-arm.left { transform: rotate(160deg) translateY(-10px) translateX(-4px); } .diving-high .player-arm.right { transform: rotate(-160deg) translateY(-10px) translateX(4px); } .diving-high .player-legs { gap: 8px; } .diving-high .player-leg.left { transform: rotate(25deg); } .diving-high .player-leg.right { transform: rotate(-25deg); }
+    .diving-high .player-arm.left { transform: rotate(160deg) translateY(-15px) translateX(-6px); } 
+    .diving-high .player-arm.right { transform: rotate(-160deg) translateY(-15px) translateX(6px); } 
+    .diving-high .player-legs { gap: 12px; } 
+    .diving-high .player-leg.left { transform: rotate(25deg); } 
+    .diving-high .player-leg.right { transform: rotate(-25deg); }
 
-    @keyframes jumpCelebrate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } } .celebrating { animation: jumpCelebrate 0.4s ease-in-out infinite; } .celebrating .player-arm.left { transform: rotate(150deg) translateY(-2px); } .celebrating .player-arm.right { transform: rotate(-150deg) translateY(-2px); }
+    @keyframes jumpCelebrate { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } } 
+    .celebrating { animation: jumpCelebrate 0.4s ease-in-out infinite; } 
+    .celebrating .player-arm.left { transform: rotate(150deg) translateY(-3px); } 
+    .celebrating .player-arm.right { transform: rotate(-150deg) translateY(-3px); }
     .sad-anim .player-arm.left { transform: rotate(10deg); } .sad-anim .player-arm.right { transform: rotate(-10deg); } .sad-anim .marble-flag { transform: rotate(15deg); } 
 
     #goalkeeper { position: absolute; top: 20%; left: 50%; transform: translate3d(-50%, -50%, 0); z-index: 3; will-change: transform, left, opacity; transition: opacity 0.3s; }
     #shooter { position: absolute; z-index: 4; will-change: transform, left, top, opacity; opacity: 0; transition: opacity 0.3s; }
     
-    /* ⚽️ EMOJI BALL */
-    #ball { position: absolute; top: 45%; left: 50%; width: 16px; height: 16px; border-radius: 50%; transform: translate3d(-50%, -50%, 0); z-index: 2; will-change: transform, left, top, opacity; transition: opacity 0.3s; }
-    #ball-inner { font-size: 16px; line-height: 1; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.6)); }
+    /* ⚽️ BIGGER BALL */
+    #ball { position: absolute; top: 45%; left: 50%; width: 22px; height: 22px; border-radius: 50%; transform: translate3d(-50%, -50%, 0); z-index: 2; will-change: transform, left, top, opacity; transition: opacity 0.3s; }
+    #ball-inner { font-size: 22px; line-height: 1; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.6)); }
     @keyframes spinBall { 0% { transform: rotate(0deg); } 100% { transform: rotate(1080deg); } }
     .spin { animation: spinBall 0.4s linear forwards; }
 
@@ -293,9 +306,7 @@
         <div class="pitch-line penalty-arc"></div>
         <div class="pitch-line penalty-spot"></div>
         
-        <!-- =========================================
-             ORIGINAL GOAL POST (Perfect visuals restored)
-             ========================================= -->
+        <!-- ORIGINAL GOAL POST -->
         <div id="goal">
             <svg width="100%" height="100%" style="position:absolute; top:0; left:0; z-index: 1; overflow: visible;">
                 <pattern id="net" width="8" height="8" patternUnits="userSpaceOnUse">
@@ -393,14 +404,14 @@
     ];
 
     /*===================================================================
-      2. STATE & AUDIO
+      2. STATE & AUDIO FIXES
     ===================================================================*/
     let audioCtx = null; let synth = window.speechSynthesis;
     let settings = { sound: true, tts: true, speedMode: 'NORMAL', speedMult: 1 };
     let tournament = { roundName: "ROUND OF 32", matchNumber: 1 };
     let match = { teamA: null, teamB: null, scoreA: 0, scoreB: 0, kicksA: 0, kicksB: 0, turn: 'A', isSuddenDeath: false };
     let timeouts = []; let stateResolver = null; let socialIndex = 0;
-    let allMatches = []; let audioUnlocked = false;
+    let allMatches = [];
 
     setInterval(() => {
         let el = document.getElementById('yt-social-text'); if(!el) return;
@@ -411,23 +422,37 @@
         socialIndex = (socialIndex + 1) % ytStrings.length;
     }, 4500);
 
-    function unlockAudio() {
-        if (audioUnlocked) return;
+    // FIXED: Reliable Audio Initialization tied directly to button click
+    function initAudioEngine() {
+        if (!settings.sound) return;
         try {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-            gain.gain.value = 0; osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.1);
-            let u = new SpeechSynthesisUtterance(''); u.volume = 0; synth.speak(u);
-            audioUnlocked = true;
-        } catch(e) {}
+            let AudioContext = window.AudioContext || window.webkitAudioContext;
+            if (!audioCtx) { audioCtx = new AudioContext(); }
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            
+            // Play empty sound to truly unlock mobile browsers
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            gain.gain.value = 0;
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime); osc.stop(audioCtx.currentTime + 0.01);
+
+            // Unlock TTS
+            let u = new SpeechSynthesisUtterance('');
+            u.volume = 0;
+            synth.speak(u);
+        } catch (e) {}
     }
-    document.body.addEventListener('click', unlockAudio, { once: true });
-    document.body.addEventListener('touchstart', unlockAudio, { once: true });
+
+    // Helper to ensure audio runs even if OS suspends it temporarily
+    function checkAudio() {
+        if (!audioCtx) return false;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return true;
+    }
 
     function playNoiseFilter(duration, vol=0.1, type='lowpass', freq=1000) {
-        if (!settings.sound || !audioCtx) return;
+        if (!settings.sound || !checkAudio()) return;
         try { 
             let bufferSize = audioCtx.sampleRate * duration; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); 
             let data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1; 
@@ -441,9 +466,8 @@
     
     const sfx = {
         whistle: () => { 
-            if (!settings.sound || !audioCtx) return; 
+            if (!settings.sound || !checkAudio()) return; 
             try {
-                if (audioCtx.state === 'suspended') audioCtx.resume();
                 let t = audioCtx.currentTime; 
                 let playPeep = (time, dur, f1, f2, v) => {
                     let o1 = audioCtx.createOscillator(); let o2 = audioCtx.createOscillator(); let g = audioCtx.createGain();
@@ -457,7 +481,7 @@
             } catch(e) {}
         },
         sharpWhistle: () => { 
-            if (!settings.sound || !audioCtx) return; 
+            if (!settings.sound || !checkAudio()) return; 
             try {
                 let t = audioCtx.currentTime; let o = audioCtx.createOscillator(); let g = audioCtx.createGain();
                 o.type = 'square'; o.frequency.value = 2500;
@@ -466,7 +490,7 @@
             } catch(e) {}
         },
         swoosh: () => {
-            if (!settings.sound || !audioCtx) return;
+            if (!settings.sound || !checkAudio()) return;
             try {
                 let t = audioCtx.currentTime;
                 let osc = audioCtx.createOscillator(); let g = audioCtx.createGain();
@@ -477,7 +501,7 @@
             } catch(e) {}
         },
         pop: () => {
-            if (!settings.sound || !audioCtx) return;
+            if (!settings.sound || !checkAudio()) return;
             try {
                 let t = audioCtx.currentTime;
                 let osc = audioCtx.createOscillator(); let g = audioCtx.createGain();
@@ -487,7 +511,7 @@
             } catch(e) {}
         },
         kick: () => { 
-            if (!settings.sound || !audioCtx) return; 
+            if (!settings.sound || !checkAudio()) return; 
             try {
                 let t = audioCtx.currentTime; 
                 let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); 
@@ -499,7 +523,7 @@
         },
         net: () => playNoiseFilter(0.3, 0.7, 'highpass', 3000), 
         save: () => {
-            if (!settings.sound || !audioCtx) return;
+            if (!settings.sound || !checkAudio()) return;
             try {
                 let t = audioCtx.currentTime; 
                 let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
@@ -510,7 +534,7 @@
             } catch(e) {}
         },
         post: () => {
-            if (!settings.sound || !audioCtx) return;
+            if (!settings.sound || !checkAudio()) return;
             try {
                 let t = audioCtx.currentTime; 
                 [800, 1200, 1600].forEach(f => {
@@ -523,7 +547,7 @@
             } catch(e) {}
         },
         cheer: () => {
-            if (!settings.sound || !audioCtx) return;
+            if (!settings.sound || !checkAudio()) return;
             try {
                 let t = audioCtx.currentTime; let bufferSize = audioCtx.sampleRate * 2.5; 
                 let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); let data = buffer.getChannelData(0);
@@ -537,7 +561,7 @@
             } catch(e) {}
         },
         aww: () => { 
-            if (!settings.sound || !audioCtx) return; 
+            if (!settings.sound || !checkAudio()) return; 
             try {
                 let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = 'triangle'; 
                 osc.frequency.setValueAtTime(300, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 1.2); 
@@ -547,7 +571,7 @@
             } catch(e) {} 
         },
         win: () => { 
-            if (!settings.sound || !audioCtx) return; 
+            if (!settings.sound || !checkAudio()) return; 
             try { 
                 let t = audioCtx.currentTime; let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); 
                 osc.type = 'square'; [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => { osc.frequency.setValueAtTime(f, t + (i * 0.15)); }); 
@@ -557,7 +581,7 @@
             } catch(e) {} 
         },
         champion: () => {
-            if (!settings.sound || !audioCtx) return;
+            if (!settings.sound || !checkAudio()) return;
             try {
                 let t = audioCtx.currentTime;
                 let playNote = (f, tStart, tDur) => {
@@ -619,9 +643,9 @@
         }
     }
 
-    function toggleSound() { unlockAudio(); settings.sound = !settings.sound; document.getElementById('btn-sound').innerText = settings.sound ? "🔊 Sound: ON" : "🔇 Sound: OFF"; }
-    function toggleTTS() { unlockAudio(); settings.tts = !settings.tts; document.getElementById('btn-tts').innerText = settings.tts ? "🗣️ TTS: ON" : "🗣️ TTS: OFF"; }
-    function cycleSpeed() { unlockAudio(); if (settings.speedMode === 'NORMAL') { settings.speedMode = 'FAST'; settings.speedMult = 0.5; } else if (settings.speedMode === 'FAST') { settings.speedMode = 'SLOW'; settings.speedMult = 1.5; } else { settings.speedMode = 'NORMAL'; settings.speedMult = 1.0; } document.getElementById('btn-speed').innerText = `⚙️ Speed: ${settings.speedMode}`; }
+    function toggleSound() { initAudioEngine(); settings.sound = !settings.sound; document.getElementById('btn-sound').innerText = settings.sound ? "🔊 Sound: ON" : "🔇 Sound: OFF"; }
+    function toggleTTS() { initAudioEngine(); settings.tts = !settings.tts; document.getElementById('btn-tts').innerText = settings.tts ? "🗣️ TTS: ON" : "🗣️ TTS: OFF"; }
+    function cycleSpeed() { initAudioEngine(); if (settings.speedMode === 'NORMAL') { settings.speedMode = 'FAST'; settings.speedMult = 0.5; } else if (settings.speedMode === 'FAST') { settings.speedMode = 'SLOW'; settings.speedMult = 1.5; } else { settings.speedMode = 'NORMAL'; settings.speedMult = 1.0; } document.getElementById('btn-speed').innerText = `⚙️ Speed: ${settings.speedMode}`; }
     function delay(ms) { return new Promise(resolve => { timeouts.push(setTimeout(resolve, ms * settings.speedMult)); }); }
     function togglePause() { tournament.paused = !tournament.paused; document.getElementById('btn-hud-pause').innerText = tournament.paused ? "▶" : "⏸"; if (!tournament.paused && stateResolver) { let res = stateResolver; stateResolver = null; res(); } }
     function skipMatch() { tournament.skipRequested = true; if(tournament.paused) togglePause(); }
@@ -722,7 +746,8 @@
     }
 
     async function startGame() {
-        unlockAudio(); document.getElementById('controls-overlay').classList.add('hidden');
+        initAudioEngine(); // FORCE INITIALIZE AUDIO ON CLICK
+        document.getElementById('controls-overlay').classList.add('hidden');
         let teams = [...ALL_TEAMS].sort(() => Math.random() - 0.5).slice(0, 32); 
         generateBracketHTML(); allMatches = new Array(31).fill(null).map(() => ({A: null, B: null}));
         for(let i=0; i<16; i++) { allMatches[i].A = teams[i*2]; allMatches[i].B = teams[i*2 + 1]; updateMatchDOM(i, allMatches[i].A, allMatches[i].B); }
@@ -826,8 +851,11 @@
         }
 
         let winner = match.scoreA > match.scoreB ? match.teamA : match.teamB;
-        speak(`${winner.name} wins!`, true); sfx.win(); showAlert(`${winner.flag} WINS!`, '#f8ca25'); sfx.cheer(); 
-        await delay(2000);
+        // Don't show generic alert for the tournament winner
+        if (tournament.matchNumber < 31) {
+            speak(`${winner.name} wins!`, true); sfx.win(); showAlert(`${winner.flag} WINS!`, '#f8ca25'); sfx.cheer(); 
+            await delay(2000);
+        }
         document.getElementById('alert-box').classList.remove('alert-show');
         document.getElementById('shooter').style.opacity = '0'; document.getElementById('goalkeeper').style.opacity = '0'; document.getElementById('ball').style.opacity = '0';
         return winner;
@@ -892,8 +920,8 @@
         }
 
         let gkLeft = 50 + (data.gk.x * 19); 
-        // FIX: Keeper top dive lowered slightly to match perfectly (from 3 to 6)
-        let gkTop = data.gk.y === 1 ? 6 : 16; 
+        // FIX: Keeper top dive exactly matching ball level (lowered slightly from previous)
+        let gkTop = data.gk.y === 1 ? 7 : 16; 
         let rot = data.gk.x * 75;
         if(data.gk.y === 1 && data.gk.x === 0) rot = 0; // Jump straight up
 
