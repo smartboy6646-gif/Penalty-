@@ -104,11 +104,48 @@
     .p-score { font-family: 'Oswald'; font-size: 0.85rem; color: var(--gold); padding: 0 2px; flex-shrink: 0; }
     .panel-right .p-score { color: #4ade80; }
 
-    /* TV STYLE NEWS TICKER */
-    #news-ticker-wrap { position: absolute; bottom: 0; left: 0; width: 100%; height: 26px; background: rgba(0,0,0,0.9); display: none; align-items: center; z-index: 100; border-top: 2px solid var(--gold); box-shadow: 0 -2px 10px rgba(0,0,0,0.8); }
-    .news-badge { background: var(--red); color: #fff; font-family: 'Oswald'; font-weight: 700; font-size: 0.65rem; padding: 0 10px; height: 100%; display: flex; align-items: center; z-index: 2; box-shadow: 2px 0 5px rgba(0,0,0,0.5); text-transform: uppercase; letter-spacing: 1px;}
+    /* TV STYLE NEWS TICKER - MOVED TO THE RED CIRCLE LOCATION */
+    #news-ticker-wrap { 
+        position: absolute; 
+        bottom: 105px; /* Precisely above the match panels */
+        left: 5%; 
+        width: 90%; 
+        height: 36px; 
+        background: rgba(0,0,0,0.95); 
+        display: none; 
+        align-items: center; 
+        z-index: 100; 
+        border: 2px solid var(--gold); 
+        border-radius: 8px; 
+        box-shadow: 0 5px 20px rgba(0,0,0,0.9); 
+    }
+    .news-badge { 
+        background: var(--red); 
+        color: #fff; 
+        font-family: 'Oswald'; 
+        font-weight: 700; 
+        font-size: 0.9rem; 
+        padding: 0 15px; 
+        height: 100%; 
+        display: flex; align-items: center; 
+        z-index: 2; 
+        box-shadow: 2px 0 10px rgba(0,0,0,0.8); 
+        text-transform: uppercase; 
+        letter-spacing: 1px;
+        border-radius: 6px 0 0 6px;
+    }
     .news-marquee { flex: 1; overflow: hidden; position: relative; height: 100%; }
-    .news-text { position: absolute; white-space: nowrap; font-family: 'Oswald', sans-serif; font-size: 0.8rem; color: #fff; top: 50%; transform: translateY(-50%); padding-left: 100%; letter-spacing: 0.5px;}
+    .news-text { 
+        position: absolute; 
+        white-space: nowrap; 
+        font-family: 'Oswald', sans-serif; 
+        font-size: 1.1rem; 
+        color: #fff; 
+        top: 50%; transform: translateY(-50%); 
+        padding-left: 100%; 
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
     @keyframes marqueeScroll { 0% { transform: translate(0, -50%); } 100% { transform: translate(-100%, -50%); } }
 
     /* PLAYER MODEL & NUMBERS */
@@ -189,28 +226,44 @@
     #hud-controls { position: absolute; top: 80px; right: 5px; z-index: 20; display: flex; flex-direction: column; gap: 5px; }
     .hud-btn { background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 5px; font-size: 0.8rem; border-radius: 50%; width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; cursor: pointer; }
 
-    /* BRACKET */
-    #bracket-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, rgba(26,26,26,0.95) 0%, rgba(0,0,0,0.98) 100%); z-index: 200; display: flex; flex-direction: column; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding-top: 15px; overflow: hidden; backdrop-filter: blur(8px); }
+    /* UPGRADED BRACKET UI & ANIMATION STYLES */
+    @keyframes bracketBGFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    
+    #bracket-screen { 
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+        background: linear-gradient(-45deg, rgba(15, 23, 42, 0.98), rgba(88, 28, 135, 0.95), rgba(15, 118, 110, 0.95), rgba(185, 28, 28, 0.95)); 
+        background-size: 400% 400%;
+        animation: bracketBGFlow 12s ease infinite;
+        z-index: 200; display: flex; flex-direction: column; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; padding-top: 15px; overflow: hidden; backdrop-filter: blur(8px); 
+    }
     #bracket-screen.show { opacity: 1; pointer-events: auto; }
+    
     .bracket-header { font-family: 'Oswald', sans-serif; font-size: 1.8rem; color: #fff; text-shadow: 0 0 10px var(--gold); margin-bottom: 5px; text-transform: uppercase; text-align: center; line-height: 1.1; flex-shrink: 0; }
     .bracket-sub { color: var(--gold); font-size: 0.8rem; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px; flex-shrink: 0; }
-    #bracket-scroll-area { display: flex; align-items: center; justify-content: flex-start; width: 100%; height: 85%; padding: 0 40px; margin-top: 10px; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; scroll-behavior: smooth; gap: 30px; }
+    
+    #bracket-zoom-wrapper { width: 100%; height: 85%; transition: transform 1s cubic-bezier(0.25, 1, 0.5, 1); transform-origin: center; display: flex; align-items: center; }
+    
+    /* Removed smooth scrolling here so JS can control 'auto' vs 'smooth' accurately */
+    #bracket-scroll-area { display: flex; align-items: center; justify-content: flex-start; width: 100%; height: 100%; padding: 0 40px; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; gap: 30px; position: relative; }
     #bracket-scroll-area::-webkit-scrollbar { display: none; } 
+    
     .bracket-col { display: flex; flex-direction: column; justify-content: space-around; min-width: 130px; height: 100%; flex-shrink: 0; position: relative; }
     .final-col { justify-content: center; align-items: center; gap: 40px; min-width: 100px; }
     #bracket-trophy { font-size: 3.5rem; filter: drop-shadow(0 0 15px var(--gold)); animation: floatTrophy 2s infinite ease-in-out; }
     @keyframes floatTrophy { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    .b-match { background: #111; border: 1px solid #333; border-radius: 6px; padding: 4px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.5); transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; }
-    .b-highlight { border-color: var(--gold); transform: scale(1.1); z-index: 5; box-shadow: 0 0 15px rgba(248, 202, 37, 0.5); }
-    .b-team { display: flex; align-items: center; justify-content: space-between; padding: 4px; font-size: 0.65rem; color: #ddd; border-bottom: 1px solid #222; }
+    
+    .b-match { background: rgba(17, 17, 17, 0.9); border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(4px); border-radius: 6px; padding: 4px; position: relative; box-shadow: 0 4px 6px rgba(0,0,0,0.5); transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s; }
+    .b-highlight { border-color: var(--gold); transform: scale(1.15); z-index: 5; box-shadow: 0 0 15px rgba(248, 202, 37, 0.8); }
+    .b-team { display: flex; align-items: center; justify-content: space-between; padding: 4px; font-size: 0.65rem; color: #ddd; border-bottom: 1px solid #333; }
     .b-team:last-child { border-bottom: none; }
-    .b-team.winner { color: #fff; font-weight: bold; background: rgba(255,255,255,0.1); border-radius: 4px; }
+    .b-team.winner { color: #fff; font-weight: bold; background: rgba(255,255,255,0.15); border-radius: 4px; }
     .b-flag { font-size: 0.9rem; margin-right: 5px; min-width: 15px; text-align: center; }
     .b-name { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .b-score { font-family: 'Oswald', sans-serif; font-weight: bold; color: var(--gold); margin-left: 5px; font-size: 0.8rem; }
-    .left-side .b-match::after { content: ''; position: absolute; top: 50%; right: -15px; width: 15px; height: 1px; background: #555; }
-    .right-side .b-match::after { content: ''; position: absolute; top: 50%; left: -15px; width: 15px; height: 1px; background: #555; }
-    .flag-pop-anim { position: fixed; z-index: 300; font-size: 1.5rem; background: #fff; width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--gold); box-shadow: 0 0 20px rgba(248, 202, 37, 1); transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease-in 0.7s; transform-origin: center; }
+    .left-side .b-match::after { content: ''; position: absolute; top: 50%; right: -15px; width: 15px; height: 1px; background: rgba(255,255,255,0.5); }
+    .right-side .b-match::after { content: ''; position: absolute; top: 50%; left: -15px; width: 15px; height: 1px; background: rgba(255,255,255,0.5); }
+    
+    .flag-pop-anim { position: absolute; z-index: 300; font-size: 1.5rem; background: #fff; width: 35px; height: 35px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid var(--gold); box-shadow: 0 0 20px rgba(248, 202, 37, 1); transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.3s ease-in 0.9s; transform-origin: center; pointer-events: none; }
 
     /* EPIC CHAMPION SCREEN & NEON RGB LIGHTS */
     #champion-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #3a3200 0%, #000000 100%); z-index: 500; display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 1s ease-in; overflow: hidden; }
@@ -272,11 +325,13 @@
         </div>
     </div>
 
-    <!-- BRACKET -->
+    <!-- BRACKET OVERLAY -->
     <div id="bracket-screen">
         <div class="bracket-header">KNOCKOUT STAGE</div>
         <div class="bracket-sub" id="bracket-round-text">ROUND OF 32</div>
-        <div id="bracket-scroll-area"></div>
+        <div id="bracket-zoom-wrapper">
+            <div id="bracket-scroll-area"></div>
+        </div>
     </div>
     
     <div id="champion-overlay">
@@ -561,44 +616,120 @@
     function getRoundName(idx) { if(idx < 16) return "ROUND OF 32"; if(idx < 24) return "ROUND OF 16"; if(idx < 28) return "QUARTER-FINALS"; if(idx < 30) return "SEMI-FINALS"; return "THE FINAL"; }
     function getCurrentRoundRank(idx) { if(idx < 16) return 0; if(idx < 24) return 1; if(idx < 28) return 2; if(idx < 30) return 3; return 4; }
 
-    function centerBracketOnMatch(idx) {
+    // Completely fixes position tracking ignoring CSS scales for zooming!
+    function getRelativePos(el, container) {
+        let x = 0, y = 0;
+        let current = el;
+        while (current && current !== container) {
+            x += current.offsetLeft; y += current.offsetTop;
+            current = current.offsetParent;
+        }
+        return { x, y, w: el.offsetWidth, h: el.offsetHeight };
+    }
+
+    // Centers the zoomed bracket accurately by mapping unscaled position
+    function centerBracketOnMatch(idx, behavior = 'smooth') {
         let mBox = document.getElementById(`b-match-${idx}`); 
         let scrollArea = document.getElementById('bracket-scroll-area');
         if (mBox && scrollArea) { 
-            let mRect = mBox.getBoundingClientRect(); let sRect = scrollArea.getBoundingClientRect();
-            let targetScroll = scrollArea.scrollLeft + (mRect.left - sRect.left) - (sRect.width / 2) + (mRect.width / 2);
-            scrollArea.scrollTo({ left: targetScroll, behavior: 'smooth' }); 
+            let pos = getRelativePos(mBox, scrollArea);
+            let targetScroll = pos.x - (scrollArea.offsetWidth / 2) + (pos.w / 2);
+            scrollArea.scrollTo({ left: targetScroll, behavior: behavior }); 
         }
     }
 
-    async function showBracketScreen_PreMatch(idx) {
-        let sc = document.getElementById('bracket-screen'); if(!sc) return;
-        try { sc.classList.add('show'); let mBox = document.getElementById(`b-match-${idx}`); if(mBox) { mBox.classList.add('b-highlight'); centerBracketOnMatch(idx); } sfx.swoosh(); speak("Next match up!", true); await delay(2500); if(mBox) mBox.classList.remove('b-highlight'); } catch(e) {} finally { if(sc) sc.classList.remove('show'); await delay(500); }
-    }
-
+    // Post match zooms in on finished match, pops flag to next match, pans to next match.
     async function showBracketScreen_PostMatch(idx, matchData, winnerTeam) {
         let sc = document.getElementById('bracket-screen'); if(!sc) return;
+        let zoomWrap = document.getElementById('bracket-zoom-wrapper');
+        let scrollArea = document.getElementById('bracket-scroll-area');
+        
         try {
-            sc.classList.add('show'); let mBox = document.getElementById(`b-match-${idx}`); if(mBox) centerBracketOnMatch(idx);
+            sc.classList.add('show'); 
+            zoomWrap.style.transform = 'scale(1.5)';
+            centerBracketOnMatch(idx, 'auto');
+            await delay(500); 
+
             let sA = document.getElementById(`b-score-A-${idx}`); if (sA) sA.innerText = matchData.scoreA;
             let sB = document.getElementById(`b-score-B-${idx}`); if (sB) sB.innerText = matchData.scoreB;
             let side = (winnerTeam === matchData.teamA) ? 'A' : 'B';
             let tEl = document.getElementById(`m-${idx}-t${side}`); if (tEl) tEl.classList.add('winner');
+            
             await delay(1000);
-            let flagEl = document.querySelector(`#m-${idx}-t${side} .b-flag`); let nextMatchIdx = getNextMatch(idx);
-            let targetEl; if (nextMatchIdx !== null) { let nextSlot = idx % 2 === 0 ? 'A' : 'B'; targetEl = document.querySelector(`#m-${nextMatchIdx}-t${nextSlot} .b-flag`); } else { targetEl = document.getElementById('bracket-trophy'); }
-            if (flagEl && targetEl) {
-                let fRect = flagEl.getBoundingClientRect(); let tRect = targetEl.getBoundingClientRect();
-                let clone = document.createElement('div'); clone.className = 'flag-pop-anim'; clone.innerText = winnerTeam.flag;
-                clone.style.top = fRect.top + 'px'; clone.style.left = fRect.left + 'px'; document.body.appendChild(clone);
-                sfx.pop(); await delay(50);
-                let moveX = tRect.left - fRect.left + (tRect.width/2) - 17; let moveY = tRect.top - fRect.top + (tRect.height/2) - 17;
-                clone.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.5)`;
-                await delay(1000); clone.style.opacity = '0'; await delay(400);
-                if(clone.parentNode) clone.remove();
-                if (nextMatchIdx !== null) { targetEl.innerText = winnerTeam.flag; targetEl.nextElementSibling.innerText = winnerTeam.name; }
+            
+            let flagEl = document.querySelector(`#m-${idx}-t${side} .b-flag`); 
+            let nextMatchIdx = getNextMatch(idx);
+            let targetEl; 
+            
+            if (nextMatchIdx !== null) { 
+                let nextSlot = idx % 2 === 0 ? 'A' : 'B'; 
+                targetEl = document.querySelector(`#m-${nextMatchIdx}-t${nextSlot} .b-flag`); 
+            } else { 
+                targetEl = document.getElementById('bracket-trophy'); 
             }
-        } catch(e) {} 
+            
+            if (flagEl && targetEl) {
+                let fPos = getRelativePos(flagEl, scrollArea); 
+                let tPos = getRelativePos(targetEl, scrollArea);
+                
+                let clone = document.createElement('div'); 
+                clone.className = 'flag-pop-anim'; 
+                // perfectly center clone on the original flag
+                clone.style.top = (fPos.y - (35 - fPos.h)/2) + 'px'; 
+                clone.style.left = (fPos.x - (35 - fPos.w)/2) + 'px'; 
+                clone.innerText = winnerTeam.flag;
+                scrollArea.appendChild(clone);
+                
+                sfx.pop(); await delay(50);
+                
+                let moveX = tPos.x - fPos.x + (tPos.w/2) - (fPos.w/2); 
+                let moveY = tPos.y - fPos.y + (tPos.h/2) - (fPos.h/2);
+                
+                // Pan smoothly to next match WHILE zoomed in so we follow flag
+                if (nextMatchIdx !== null) centerBracketOnMatch(nextMatchIdx, 'smooth');
+                
+                clone.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.5)`;
+                
+                await delay(1200); 
+                clone.style.opacity = '0'; await delay(300);
+                if(clone.parentNode) clone.remove();
+                
+                if (nextMatchIdx !== null) { 
+                    targetEl.innerText = winnerTeam.flag; 
+                    targetEl.nextElementSibling.innerText = winnerTeam.name; 
+                }
+            }
+            
+            // Stay open and zoomed for PreMatch to take over seamlessly!
+            await delay(500);
+        } catch(e) { console.error(e); } 
+    }
+
+    // Pre Match continues from Post Match, pans to new match, highlights it, then closes.
+    async function showBracketScreen_PreMatch(idx) {
+        let sc = document.getElementById('bracket-screen'); if(!sc) return;
+        let zoomWrap = document.getElementById('bracket-zoom-wrapper');
+        try { 
+            sc.classList.add('show'); 
+            zoomWrap.style.transform = 'scale(1.5)';
+            
+            let mBox = document.getElementById(`b-match-${idx}`); 
+            if(mBox) { 
+                centerBracketOnMatch(idx, 'smooth');
+                await delay(800); // Wait for the pan to settle on the NEW match
+                
+                mBox.classList.add('b-highlight'); 
+                sfx.swoosh(); speak("Next match up!", true); 
+                await delay(2200); // Give user a moment to see upcoming match centered and huge
+                mBox.classList.remove('b-highlight'); 
+            }
+            
+            zoomWrap.style.transform = 'scale(1)'; // zoom out before closing
+            await delay(500);
+        } catch(e) {} finally { 
+            if(sc) sc.classList.remove('show'); 
+            await delay(500); 
+        }
     }
 
     function updateMatchPanels(currentIdx) {
@@ -613,7 +744,7 @@
         generateBracketHTML(); allMatches = new Array(31).fill(null).map(() => ({A: null, B: null}));
         for(let i=0; i<16; i++) { allMatches[i].A = teams[i*2]; allMatches[i].B = teams[i*2 + 1]; updateMatchDOM(i, allMatches[i].A, allMatches[i].B); }
         speak("Welcome to the shootout!", true); await delay(1000); 
-        document.getElementById('bracket-screen').classList.add('show'); await showBracketScreen_PreMatch(0); runTournamentLoop(0);
+        await showBracketScreen_PreMatch(0); runTournamentLoop(0);
     }
 
     async function resumeGame() {
@@ -625,7 +756,7 @@
             if(allMatches[i].scoreA !== undefined) { document.getElementById(`b-score-A-${i}`).innerText = allMatches[i].scoreA; document.getElementById(`b-score-B-${i}`).innerText = allMatches[i].scoreB; let winner = allMatches[i].scoreA > allMatches[i].scoreB ? 'A' : 'B'; document.getElementById(`m-${i}-t${winner}`).classList.add('winner'); }
         }
         speak("Resuming tournament!", true); await delay(1000); 
-        document.getElementById('bracket-screen').classList.add('show'); await showBracketScreen_PreMatch(startIdx); runTournamentLoop(startIdx);
+        await showBracketScreen_PreMatch(startIdx); runTournamentLoop(startIdx);
     }
 
     async function runTournamentLoop(startIdx) {
